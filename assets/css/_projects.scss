@@ -39,6 +39,12 @@
 .projects {
   padding: 8px 0 32px;
 
+  &__content {
+    width: calc(100% - 48px);
+    max-width: 1500px;
+    margin-inline: auto;
+  }
+
   .projects-toolbar {
     display: flex;
     flex-direction: column;
@@ -227,6 +233,10 @@
 @media (max-width: 612px) {
   .projects {
     padding-top: 0;
+
+    &__content {
+      width: calc(100% - 24px);
+    }
 
     .projects-toolbar {
       padding: 16px;

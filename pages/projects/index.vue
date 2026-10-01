@@ -1,6 +1,6 @@
 <template>
   <div class="projects mt-5">
-    <div class="w-95 m-auto">
+    <div class="projects__content">
       <div class="rms-filter-bar projects-toolbar">
         <h2 class="section-title">{{ $t('Current Projects') }}</h2>
         <div class="projects-toolbar__actions">
@@ -869,12 +869,6 @@ export default {
 }
 
 @media (max-width: 600px) {
-  .projects {
-    .w-95 {
-      width: calc(100% - 24px);
-    }
-  }
-
   .project-kanban-card {
     padding: 12px;
     gap: 10px;
