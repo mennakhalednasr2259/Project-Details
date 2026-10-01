@@ -1,0 +1,402 @@
+// ═══════════════════════════════════════════════════
+//  Dark mode + third-party surface overrides
+//  Relies on CSS variables defined in variables.scss
+// ═══════════════════════════════════════════════════
+
+html,
+body {
+  background: $background;
+  color: $text-primary;
+}
+
+html.theme-dark,
+html[data-theme='dark'] {
+  background: $background;
+  color: $text-primary;
+}
+
+.theme--dark.v-application,
+.theme--dark.v-application .v-main,
+.theme--dark.v-application .v-main__wrap {
+  background: $background !important;
+  color: $text-primary !important;
+}
+
+.v-navigation-drawer {
+  background: $surface !important;
+  color: $text-primary !important;
+}
+
+.theme--dark.v-card,
+.theme--dark.v-list,
+.theme--dark.v-navigation-drawer,
+.theme--dark.v-toolbar,
+.theme--dark.v-app-bar,
+.theme--dark.v-footer,
+.theme--dark.v-tabs,
+.theme--dark.v-tabs-bar,
+.theme--dark.v-data-table,
+.theme--dark.v-pagination__item,
+.theme--dark.v-pagination__navigation,
+.theme--dark.v-expansion-panel,
+.theme--dark.v-snackbar__wrapper {
+  background-color: $surface !important;
+  color: $text-primary !important;
+}
+
+.theme--dark.v-list-item:hover::before,
+.theme--dark.v-list-item--highlighted::before {
+  opacity: 0.08;
+}
+
+.theme--dark.v-list-item .v-list-item__title,
+.v-list-item__title {
+  color: inherit;
+}
+
+.theme--dark.v-list-item .v-list-item__subtitle,
+.v-list-item__subtitle {
+  color: $text-secondary !important;
+}
+
+.theme--dark.v-label {
+  color: $text-secondary !important;
+}
+
+.theme--dark.v-input input,
+.theme--dark.v-input textarea,
+.theme--dark.v-select__selection,
+.theme--dark.v-select__selection--comma {
+  color: $text-primary !important;
+}
+
+.theme--light.v-input input::placeholder,
+.theme--light.v-input textarea::placeholder,
+.theme--dark.v-input input::placeholder,
+.theme--dark.v-input textarea::placeholder {
+  color: $text-muted !important;
+  opacity: 1 !important;
+}
+
+.theme--dark.v-text-field--outlined fieldset,
+.theme--dark.v-textarea--outlined fieldset {
+  border-color: $border !important;
+}
+
+.theme--dark.v-data-table > .v-data-table__wrapper > table > thead > tr > th {
+  background: $surface-secondary !important;
+  color: $text-secondary !important;
+  border-bottom-color: $border !important;
+}
+
+.theme--dark.v-data-table > .v-data-table__wrapper > table > tbody > tr:hover {
+  background: $surface-hover !important;
+}
+
+.theme--dark.v-data-table > .v-data-table__wrapper > table > tbody > tr:hover:not(.v-data-table__expanded__content) {
+  background: $surface-hover !important;
+}
+
+.theme--light.v-chip.primary,
+.theme--dark.v-chip.primary,
+.v-chip.primary {
+  background-color: $primary-soft !important;
+  color: $primary !important;
+
+  .v-chip__content { color: $primary !important; }
+}
+
+.theme--light.v-chip.success,
+.theme--dark.v-chip.success,
+.v-chip.success {
+  background-color: $success-soft !important;
+  color: $success !important;
+
+  .v-chip__content { color: $success !important; }
+}
+
+.theme--light.v-chip.error,
+.theme--dark.v-chip.error,
+.v-chip.error {
+  background-color: $danger-soft !important;
+  color: $danger !important;
+
+  .v-chip__content { color: $danger !important; }
+}
+
+.theme--light.v-chip.warning,
+.theme--dark.v-chip.warning,
+.v-chip.warning {
+  background-color: $warning-soft !important;
+  color: $warning !important;
+
+  .v-chip__content { color: $warning !important; }
+}
+
+.theme--light.v-chip.info,
+.theme--dark.v-chip.info,
+.v-chip.info {
+  background-color: $info-soft !important;
+  color: $info !important;
+
+  .v-chip__content { color: $info !important; }
+}
+
+.theme--light.v-alert.info,
+.theme--dark.v-alert.info,
+.v-alert.info {
+  background: $info-soft !important;
+  color: $info !important;
+  border: 1px solid $border !important;
+}
+
+.theme--light.v-alert.success,
+.theme--dark.v-alert.success,
+.v-alert.success {
+  background: $success-soft !important;
+  color: $success !important;
+}
+
+.theme--light.v-alert.error,
+.theme--dark.v-alert.error,
+.v-alert.error {
+  background: $danger-soft !important;
+  color: $danger !important;
+}
+
+.theme--light.v-alert.warning,
+.theme--dark.v-alert.warning,
+.v-alert.warning {
+  background: $warning-soft !important;
+  color: $warning !important;
+}
+
+.v-alert a {
+  color: inherit !important;
+  font-weight: 600;
+  text-decoration: underline;
+}
+
+.theme--dark.v-picker,
+.theme--dark.v-picker__body,
+.theme--dark.v-date-picker-table,
+.theme--dark.v-date-picker-header,
+.theme--dark.v-time-picker-clock {
+  background: $surface !important;
+  color: $text-primary !important;
+}
+
+.theme--dark.v-date-picker-table .v-btn {
+  color: $text-primary !important;
+}
+
+.v-menu__content,
+.v-autocomplete__content,
+.v-select-list {
+  background: $surface !important;
+  color: $text-primary !important;
+}
+
+.v-input--is-disabled input,
+.v-input--is-disabled textarea,
+.v-input--is-disabled .v-select__selection {
+  color: $text-muted !important;
+}
+
+.theme-toggle-btn {
+  width: 32px !important;
+  height: 32px !important;
+  min-width: 32px !important;
+  min-height: 32px !important;
+  padding: 0 !important;
+  border: 1px solid $border !important;
+  border-radius: $radius-btn !important;
+  background: $surface !important;
+  box-shadow: none !important;
+  margin: 0 !important;
+
+  .v-icon {
+    font-size: 18px !important;
+    color: $text-primary !important;
+  }
+
+  &:hover {
+    background: $surface-secondary !important;
+    border-color: $border-strong !important;
+  }
+
+  &--plain {
+    background: $surface !important;
+  }
+}
+
+.appearance-options {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+
+  @media (max-width: 600px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.appearance-option {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 12px 14px;
+  border: 1px solid $border;
+  border-radius: $radius-card;
+  background: $surface;
+  color: $text-primary;
+  cursor: pointer;
+  text-align: start;
+  font-family: inherit;
+  transition: border-color $ownTransition, background $ownTransition;
+
+  .v-icon {
+    color: $text-secondary !important;
+  }
+
+  &:hover {
+    border-color: $border-strong;
+    background: $surface-hover;
+  }
+
+  &.is-active {
+    border-color: $primary;
+    background: $primary-soft;
+
+    .v-icon {
+      color: $primary !important;
+    }
+  }
+
+  strong {
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  span {
+    font-size: 12px;
+    color: $text-secondary;
+  }
+}
+
+.ql-toolbar.ql-snow,
+.ql-container.ql-snow,
+.note-editor,
+.note-toolbar,
+.note-editing-area,
+.note-editable {
+  background: $surface !important;
+  color: $text-primary !important;
+  border-color: $border !important;
+}
+
+.ql-toolbar.ql-snow {
+  background: $surface-secondary !important;
+}
+
+.ql-snow .ql-stroke {
+  stroke: $text-secondary !important;
+}
+
+.ql-snow .ql-fill {
+  fill: $text-secondary !important;
+}
+
+.ql-snow .ql-picker-label,
+.ql-editor,
+.note-editable {
+  color: $text-primary !important;
+}
+
+.ql-editor.ql-blank::before {
+  color: $text-muted !important;
+}
+
+.ql-snow .ql-picker-options,
+.note-dropdown-menu {
+  background: $surface !important;
+  border: 1px solid $border !important;
+  color: $text-primary !important;
+}
+
+.apexcharts-tooltip {
+  background: $surface !important;
+  color: $text-primary !important;
+  border: 1px solid $border !important;
+  box-shadow: $shadow-sm !important;
+}
+
+.apexcharts-tooltip-title {
+  background: $surface-secondary !important;
+  color: $text-primary !important;
+  border-bottom: 1px solid $border !important;
+}
+
+.apexcharts-gridline {
+  stroke: $border !important;
+}
+
+.apexcharts-xaxis-label,
+.apexcharts-yaxis-label,
+.apexcharts-legend-text,
+.apexcharts-datalabel,
+.apexcharts-text {
+  fill: $text-secondary !important;
+  color: $text-secondary !important;
+}
+
+.apexcharts-yaxis-title-text,
+.apexcharts-xaxis-title-text {
+  fill: $text-primary !important;
+}
+
+.v-skeleton-loader .v-skeleton-loader__bone,
+.app-skeleton__line,
+.app-skeleton__card,
+.app-skeleton__block {
+  background: linear-gradient(
+    90deg,
+    $surface-secondary 25%,
+    var(--skeleton-mid) 50%,
+    $surface-secondary 75%
+  ) !important;
+}
+
+html.theme-dark {
+  ::selection {
+    background: $primary-soft;
+    color: $text-primary;
+  }
+
+  input:-webkit-autofill,
+  textarea:-webkit-autofill,
+  select:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0 1000px $surface inset !important;
+    -webkit-text-fill-color: $text-primary !important;
+    caret-color: $text-primary !important;
+  }
+}
+
+html.theme-dark .grey--text,
+html.theme-dark .grey--text.text--lighten-1,
+html.theme-dark .grey--text.text--darken-1,
+html.theme-dark .grey--text.text--darken-2 {
+  color: $text-secondary !important;
+}
+
+html.theme-dark .black--text {
+  color: $text-primary !important;
+}
+
+.dp__theme_light,
+.dp__theme_dark,
+.dp__menu {
+  background: $surface !important;
+  color: $text-primary !important;
+  border-color: $border !important;
+}

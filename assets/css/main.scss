@@ -1,0 +1,315 @@
+@import './variables.scss';
+@import './_utils.scss';
+@import './_global.scss';
+@import './_theme.scss';
+@import './_theme-extended.scss';
+@import './_theme-dark.scss';
+@import './_components.scss';
+@import './_chat.scss';
+@import './_auth.scss';
+@import './_pages.scss';
+@import './_projects.scss';
+@import './admin-subscription-detail.scss';
+@import './_responsive.scss';
+
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap');
+
+* {
+  font-family: var(--font-body);
+  letter-spacing: 0 !important;
+  box-sizing: border-box;
+}
+
+html[lang='en'] *,
+html[dir='ltr'] * {
+  font-family: var(--font-body);
+}
+
+html[lang='ar'] *,
+html[dir='rtl'] * {
+  font-family: var(--font-ar);
+}
+
+body,
+.v-application,
+.v-main,
+.v-main__wrap {
+  color: $text-primary !important;
+  background: $background !important;
+}
+
+h1, h2, h3, h4, h5, h6,
+.section-title {
+  font-family: var(--font-display);
+  color: $text-primary;
+  font-weight: 600;
+}
+
+p, li, td, th, label {
+  color: $text-primary;
+}
+
+a {
+  color: $primary;
+
+  &:hover {
+    color: $primary-hover;
+  }
+}
+
+.page-enter-active,
+.page-leave-active {
+  transition: opacity 0.16s ease, transform 0.16s ease;
+}
+
+.page-enter {
+  transform: translateY(8px);
+  opacity: 0;
+}
+
+.page-leave-to {
+  opacity: 0;
+}
+
+.btn-create {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  border: none !important;
+  background-color: $primary !important;
+  color: $on-primary !important;
+  border-radius: $radius-btn;
+  padding: 10px 16px;
+  min-height: 40px;
+  font-weight: 500;
+  font-size: 14px;
+  font-family: var(--font-display);
+  box-shadow: none;
+  transition: background $ownTransition, color $ownTransition;
+  text-align: center;
+  cursor: pointer;
+  text-transform: none;
+
+  &:hover {
+    background-color: $primary-hover !important;
+    color: $on-primary !important;
+  }
+}
+
+.btn-delete {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border: 1px solid $border !important;
+  color: $danger !important;
+  background: $surface !important;
+  border-radius: $radius-btn;
+  padding: 6px 12px !important;
+  width: auto !important;
+  min-height: 36px;
+  font-weight: 500;
+  font-family: var(--font-display);
+  font-size: 13px;
+  line-height: 1.2;
+  white-space: nowrap;
+  box-shadow: none;
+  transition: background $ownTransition, border-color $ownTransition;
+  cursor: pointer;
+  text-transform: none;
+
+  &:hover {
+    background: $danger-soft !important;
+    color: $danger !important;
+    border-color: $danger-soft !important;
+  }
+
+  &--sm {
+    min-height: 32px;
+    padding: 4px 10px !important;
+    font-size: 12px;
+  }
+
+  &--icon {
+    min-width: 32px;
+    min-height: 32px;
+    padding: 0 !important;
+
+    .mdi {
+      font-size: 18px;
+      line-height: 1;
+    }
+  }
+}
+
+.btn-edit,
+.btn-warning {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid $border !important;
+  color: $text-primary !important;
+  background: $surface !important;
+  border-radius: $radius-btn;
+  padding: 6px 12px !important;
+  width: auto !important;
+  min-height: 36px;
+  font-weight: 500;
+  font-family: var(--font-display);
+  font-size: 13px;
+  box-shadow: none;
+  transition: background $ownTransition, border-color $ownTransition;
+  cursor: pointer;
+  text-transform: none;
+
+  &:hover {
+    background: $surface-secondary !important;
+    border-color: $border-strong !important;
+  }
+}
+
+.dialog-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 24px;
+
+  .btn-delete,
+  .btn-create,
+  .btn-view,
+  .btn-danger {
+    flex: 0 0 auto;
+    min-width: 96px;
+    width: auto !important;
+  }
+}
+
+.confirm-delete-dialog {
+  .confirm-delete-dialog__card {
+    padding: 28px 24px 24px;
+    border-radius: 16px !important;
+    box-shadow: $shadow-md !important;
+  }
+
+  .confirm-delete-dialog__icon {
+    width: 52px;
+    height: 52px;
+    margin: 0 auto 16px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba($danger, 0.1);
+  }
+
+  .confirm-delete-dialog__title {
+    margin: 0;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.6;
+    color: $text-primary;
+  }
+
+  .confirm-delete-dialog__message {
+    margin: -12px 0 0;
+    color: $text-secondary;
+    text-align: center;
+    font-size: 13px;
+    line-height: 1.55;
+  }
+
+  .confirm-delete-dialog__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 24px;
+
+    .btn {
+      min-width: 110px;
+      min-height: 40px;
+      padding: 10px 18px !important;
+      font-size: 14px;
+    }
+
+    .btn-danger {
+      display: inline-flex !important;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+}
+
+.btn-show {
+  border: 1px solid $border !important;
+  color: $success !important;
+  background: $surface !important;
+  border-radius: $radius-btn;
+  box-shadow: none;
+  font-weight: 500;
+}
+
+.btn-danger {
+  background-color: $danger !important;
+  color: $on-primary !important;
+  font-weight: 500;
+  font-size: 14px;
+  border: none !important;
+  border-radius: $radius-btn;
+  box-shadow: none;
+  transition: background $ownTransition;
+
+  &:hover {
+    background-color: $danger !important;
+    filter: brightness(0.92);
+    color: $on-primary !important;
+  }
+}
+
+.section .section-title {
+  color: $text-primary !important;
+}
+
+.ql-toolbar.ql-snow {
+  border: 1px solid $border !important;
+  border-radius: $radius-input $radius-input 0 0 !important;
+  background: $surface-secondary;
+}
+
+.ql-container.ql-snow {
+  border: 1px solid $border !important;
+  border-top: none !important;
+  border-radius: 0 0 $radius-input $radius-input !important;
+}
+
+.ql-toolbar.ql-snow .ql-picker.ql-expanded .ql-picker-options {
+  height: 180px;
+  overflow-y: auto;
+  border: 1px solid $border;
+  box-shadow: $shadow-sm;
+}
+
+.vue-star-rating .vue-star-rating-star svg {
+  filter: none;
+}
+
+input,
+textarea,
+.v-text-field input {
+  text-transform: none !important;
+}
+
+input::placeholder,
+textarea::placeholder,
+.v-text-field input::placeholder,
+.theme--light.v-input input::placeholder,
+.theme--light.v-input textarea::placeholder {
+  color: $text-muted !important;
+  opacity: 1 !important;
+}
+
+.training-toast{position:fixed;z-index:9999;bottom:24px;left:24px;padding:12px 18px;border-radius:8px;color:#fff;opacity:0;transform:translateY(8px);transition:.2s;pointer-events:none}.training-toast--visible{opacity:1;transform:translateY(0)}

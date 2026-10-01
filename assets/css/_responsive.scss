@@ -1,0 +1,141 @@
+@media (min-width: 960px) {
+  .myPanel {
+    .row {
+      justify-content: space-between;
+    }
+    .box {
+      flex: 0 0 48%;
+    }
+  }
+}
+
+@media (max-width: 959px) {
+  .v-application--is-ltr,
+  .v-application--is-rtl {
+    .rms-appbar.v-app-bar--fixed {
+      left: 0 !important;
+      right: 0 !important;
+      width: 100% !important;
+    }
+
+    .rms-main {
+      padding-left: 0 !important;
+      padding-right: 0 !important;
+    }
+  }
+
+  .rms-appbar .v-toolbar__content {
+    padding: 0 8px !important;
+  }
+
+  .myPanel {
+    .row {
+      justify-content: center;
+    }
+  }
+
+  .rms-page {
+    padding: 16px 0 32px;
+  }
+
+  .rms-page--chat {
+    padding: 0;
+  }
+
+  .section-title,
+  .section .section-title,
+  .app-page-header__title,
+  .rms-page-header h1,
+  .rms-page-header h2 {
+    font-size: 22px;
+    line-height: 28px;
+  }
+
+  .app-page-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .v-simple-table,
+  .tableTeam,
+  .v-data-table {
+    overflow-x: auto;
+  }
+
+  .rms-labeled-field {
+    min-width: 0;
+
+    &--inline {
+      flex-wrap: wrap;
+      align-items: flex-start;
+
+      .rms-labeled-field__label {
+        white-space: normal;
+        width: 100%;
+        margin-bottom: 8px;
+      }
+
+      .rms-labeled-field__control {
+        width: 100%;
+      }
+    }
+  }
+
+  .rms-filter-bar {
+    flex-direction: column;
+    align-items: stretch;
+
+    &__controls {
+      justify-content: stretch;
+
+      .v-select,
+      .v-text-field {
+        max-width: none;
+        width: 100%;
+      }
+    }
+  }
+
+  .section.align-items-end,
+  .section.align-items-center {
+    .btn-create {
+      width: 100%;
+      text-align: center;
+    }
+  }
+}
+
+@media (max-width: 612px) {
+  .logo {
+    display: none;
+  }
+  .notificationLang {
+    .userName {
+      display: none;
+    }
+  }
+  .logoSidebar {
+    display: block;
+  }
+
+  .rms-filter-bar {
+    flex-direction: column;
+    align-items: stretch;
+
+    &__controls {
+      justify-content: stretch;
+
+      .v-select,
+      .v-text-field {
+        max-width: none;
+        width: 100%;
+      }
+    }
+  }
+}
+
+@media (min-width: 612px) {
+  .logoSidebar {
+    display: none;
+  }
+}

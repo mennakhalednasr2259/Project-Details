@@ -1,0 +1,760 @@
+.v-application {
+  font-size: 14px;
+  line-height: 20px;
+  color: $text-primary !important;
+
+  p {
+    color: $text-secondary;
+    line-height: 20px;
+  }
+
+  h1 { font-size: 28px; line-height: 32px; font-weight: 600; }
+  h2 { font-size: 18px; line-height: 24px; font-weight: 600; }
+  h3 { font-size: 15px; line-height: 20px; font-weight: 600; }
+  h4 { font-size: 14px; line-height: 20px; font-weight: 600; }
+}
+
+.v-label {
+  color: $text-secondary !important;
+  font-weight: 500 !important;
+  font-size: 13px !important;
+}
+
+.v-label--active {
+  color: $primary !important;
+  font-weight: 500 !important;
+}
+
+.v-text-field,
+.v-select,
+.v-textarea {
+  > .v-input__control > .v-input__slot {
+    display: flex !important;
+    align-items: center !important;
+    position: relative !important;
+  }
+
+  > .v-input__control > .v-input__slot > .v-text-field__slot,
+  > .v-input__control > .v-input__slot > .v-select__slot {
+    display: flex !important;
+    flex: 1 1 auto !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    position: static !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+  }
+
+  .v-text-field__slot input,
+  .v-text-field__slot textarea,
+  textarea {
+    border: none !important;
+    outline: none !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    appearance: none !important;
+    -webkit-appearance: none !important;
+    color: $text-primary !important;
+    font-size: 14px !important;
+    flex: 1 1 auto !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  .v-text-field__slot input::placeholder,
+  textarea::placeholder {
+    color: $text-muted !important;
+    opacity: 1 !important;
+  }
+
+  &:not(.v-text-field--outlined) {
+    > .v-input__control > .v-input__slot::before,
+    > .v-input__control > .v-input__slot::after {
+      display: none !important;
+    }
+  }
+}
+
+.v-textarea > .v-input__control > .v-input__slot {
+  align-items: stretch !important;
+}
+
+.v-select {
+  .v-select__selections {
+    display: flex !important;
+    flex: 1 1 auto !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    align-content: center !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    line-height: 20px !important;
+    overflow: hidden !important;
+  }
+
+  .v-select__selection,
+  .v-select__selection--comma {
+    margin: 0 8px 0 0 !important;
+    max-width: 100% !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+    line-height: 20px !important;
+  }
+
+  .v-select__selections input {
+    flex: 0 0 0 !important;
+    width: 0 !important;
+    min-width: 0 !important;
+    max-width: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: none !important;
+    align-self: center !important;
+  }
+
+  &.v-autocomplete.v-input--is-focused .v-select__selections input {
+    flex: 1 1 auto !important;
+    width: auto !important;
+    min-width: 40px !important;
+    max-width: 100% !important;
+  }
+}
+
+.v-application--is-rtl .v-select .v-select__selection,
+.v-application--is-rtl .v-select .v-select__selection--comma {
+  margin: 0 0 0 8px !important;
+}
+
+.v-text-field--outlined,
+.v-textarea--outlined {
+  > .v-input__control > .v-input__slot {
+    background: $surface !important;
+    border: none !important;
+    box-shadow: none !important;
+    min-height: 42px !important;
+    padding: 0 12px !important;
+  }
+
+  &:not(.v-textarea) > .v-input__control > .v-input__slot {
+    height: 42px !important;
+  }
+
+  &.v-input--dense > .v-input__control > .v-input__slot {
+    min-height: 40px !important;
+    padding: 0 10px !important;
+  }
+
+  &.v-input--dense:not(.v-textarea) > .v-input__control > .v-input__slot {
+    height: 40px !important;
+  }
+
+  fieldset {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    pointer-events: none !important;
+    border: 1px solid $border !important;
+    border-radius: $radius-input !important;
+    transition: border-color $ownTransition;
+    margin: 0 !important;
+    padding: 0 8px !important;
+    min-width: 0 !important;
+  }
+
+  fieldset legend {
+    display: none !important;
+    width: 0 !important;
+    max-width: 0 !important;
+    padding: 0 !important;
+  }
+
+  &:hover:not(.v-input--is-focused):not(.v-input--is-disabled) fieldset {
+    border-color: $border-strong !important;
+  }
+
+  &.v-input--is-focused fieldset {
+    border: 1px solid $primary !important;
+  }
+
+  &.error--text fieldset {
+    border-color: $danger !important;
+  }
+
+  .v-input__append-inner,
+  .v-input__prepend-inner {
+    align-self: center !important;
+    margin-top: 0 !important;
+    padding: 0 !important;
+  }
+
+  input,
+  .v-select__selections {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+  }
+}
+
+.v-text-field,
+.v-select,
+.v-textarea,
+.v-autocomplete,
+.v-file-input {
+  overflow: visible !important;
+
+  > .v-input__control {
+    overflow: visible !important;
+  }
+
+  > .v-input__control > .v-input__slot {
+    overflow: visible !important;
+  }
+}
+
+.v-text-field.v-text-field--enclosed,
+.v-text-field--outlined,
+.v-textarea--outlined,
+.v-select.v-text-field {
+  padding-top: 22px !important;
+
+  .v-label,
+  .v-label.v-label--active,
+  .v-label.v-label--is-disabled {
+    position: absolute !important;
+    top: -22px !important;
+    bottom: auto !important;
+    transform: none !important;
+    max-width: none !important;
+    width: auto !important;
+    height: 20px !important;
+    margin: 0 !important;
+    overflow: visible !important;
+    pointer-events: none;
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    line-height: 20px !important;
+    color: $text-primary !important;
+    letter-spacing: 0 !important;
+  }
+}
+
+.v-application--is-ltr {
+  .v-text-field.v-text-field--enclosed .v-label,
+  .v-text-field--outlined .v-label,
+  .v-textarea--outlined .v-label,
+  .v-select.v-text-field .v-label {
+    left: 0 !important;
+    right: auto !important;
+  }
+}
+
+.v-application--is-rtl {
+  .v-text-field.v-text-field--enclosed .v-label,
+  .v-text-field--outlined .v-label,
+  .v-textarea--outlined .v-label,
+  .v-select.v-text-field .v-label {
+    right: 0 !important;
+    left: auto !important;
+  }
+}
+
+.company-switcher,
+.addMember .v-text-field,
+.addMember .v-textarea,
+.addMember .v-select,
+.cms-form .v-text-field,
+.cms-form .v-textarea,
+.cms-form .v-select {
+  padding-top: 0 !important;
+  margin-top: 0 !important;
+}
+
+.v-text-field,
+.v-select {
+  .v-input__append-inner,
+  .v-input__prepend-inner {
+    align-self: center !important;
+    margin-top: 0 !important;
+  }
+
+  .v-input__icon {
+    min-width: auto !important;
+    width: auto !important;
+    height: auto !important;
+
+    button,
+    .v-btn.v-btn--icon {
+      border: none !important;
+      background: transparent !important;
+      box-shadow: none !important;
+      padding: 4px !important;
+      margin: 0 !important;
+      min-width: 0 !important;
+      width: 32px !important;
+      height: 32px !important;
+      cursor: pointer !important;
+
+      &::before {
+        opacity: 0 !important;
+      }
+
+      &:hover::before {
+        opacity: 0 !important;
+      }
+    }
+
+    .v-icon {
+      font-size: 20px !important;
+      color: $text-muted !important;
+      transition: color $ownTransition;
+    }
+
+    &:hover .v-icon {
+      color: $primary !important;
+    }
+  }
+}
+
+.rms-password-field {
+  .v-input__append-inner {
+    display: flex !important;
+    align-items: center !important;
+    align-self: center !important;
+    margin: 0 !important;
+    padding-inline-start: 4px !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    z-index: 2 !important;
+    pointer-events: auto !important;
+  }
+
+  .v-input__icon--append,
+  .v-input__append-inner .v-icon,
+  .rms-password-field__toggle .v-icon {
+    color: #4b5563 !important;
+    opacity: 1 !important;
+  }
+
+  .rms-password-field__toggle:hover .v-icon,
+  .v-input__icon--append:hover .v-icon {
+    color: $primary !important;
+  }
+}
+
+.theme--dark .rms-password-field,
+.v-application.theme--dark .rms-password-field {
+  .v-input__append-inner .v-icon,
+  .rms-password-field__toggle .v-icon {
+    color: #d1d5db !important;
+  }
+}
+
+.v-text-field:not(.v-text-field--outlined):not(.v-textarea--outlined) {
+  > .v-input__control > .v-input__slot {
+    border: 1px solid $border !important;
+    border-radius: $radius-input !important;
+    background: $surface !important;
+    min-height: 42px !important;
+    padding: 0 12px !important;
+    transition: border-color $ownTransition;
+  }
+
+  &.v-input--is-focused > .v-input__control > .v-input__slot {
+    border-color: $primary !important;
+  }
+}
+
+.v-text-field input:-webkit-autofill,
+.v-text-field input:-webkit-autofill:hover,
+.v-text-field input:-webkit-autofill:focus,
+.v-select input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 1000px $surface inset !important;
+  -webkit-text-fill-color: $text-primary !important;
+  caret-color: $text-primary !important;
+  transition: background-color 5000s ease-in-out 0s !important;
+}
+
+.v-messages__message {
+  color: $danger !important;
+  font-weight: 500 !important;
+  font-size: 12px !important;
+}
+
+.v-input--checkbox .v-input__slot,
+.v-input--radio-group .v-input__slot,
+.v-input--selection-controls .v-input__slot,
+.v-input--switch .v-input__slot,
+.v-list-item__action .v-input__slot {
+  border: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  min-height: unset !important;
+}
+
+.v-input--checkbox fieldset,
+.v-input--selection-controls fieldset {
+  display: none !important;
+}
+
+.v-input--checkbox .v-icon,
+.v-input--selection-controls .v-icon {
+  color: $text-secondary !important;
+}
+
+.v-input--checkbox.v-input--is-label-active .v-icon,
+.v-input--selection-controls.v-input--is-label-active .v-icon {
+  color: $primary !important;
+}
+
+.v-input--switch .v-input--switch__track {
+  border: none;
+  opacity: 1 !important;
+  background: $border-strong !important;
+}
+
+.v-input--switch .v-input--switch__thumb {
+  border: none;
+  background: $on-primary !important;
+  box-shadow: $shadow-xs;
+}
+
+.v-input--switch.v-input--is-label-active .v-input--switch__track {
+  background: $primary !important;
+}
+
+.v-input--switch.v-input--is-label-active .v-input--switch__thumb {
+  background: $on-primary !important;
+}
+
+.v-menu__content {
+  border: 1px solid $border !important;
+  border-radius: 10px !important;
+  box-shadow: $shadow-sm !important;
+  background: $surface !important;
+
+  .v-list-item {
+    font-weight: 500;
+    min-height: 40px;
+    border-radius: 6px;
+    margin: 2px 6px;
+
+    &:hover {
+      background: $surface-secondary !important;
+    }
+
+    &--active {
+      background: $primary-soft !important;
+      color: $primary !important;
+
+      .v-list-item__title {
+        color: $primary !important;
+      }
+    }
+  }
+}
+
+.v-btn {
+  font-family: var(--font-display) !important;
+
+  &.error,
+  &.warning,
+  &.info {
+    border: none !important;
+    box-shadow: none !important;
+    color: $on-primary !important;
+  }
+
+  &.error {
+    background: $danger !important;
+  }
+
+  &.warning {
+    background: $warning !important;
+    color: $on-primary !important;
+  }
+
+  &.info {
+    background: $info !important;
+  }
+
+  &--disabled {
+    opacity: 0.45 !important;
+    box-shadow: none !important;
+  }
+
+  &.v-btn--text {
+    color: $primary !important;
+    font-weight: 500;
+  }
+
+  &.v-btn--icon {
+    border: none;
+    transition: background $ownTransition;
+
+    &:hover {
+      border-color: transparent;
+      background: $surface-secondary !important;
+    }
+  }
+
+  &.btn-delete,
+  &.btn-edit,
+  &.btn-view,
+  &.btn-create {
+    min-width: 0 !important;
+    height: auto !important;
+    letter-spacing: normal !important;
+    text-transform: none !important;
+
+    &::before {
+      display: none !important;
+    }
+  }
+}
+
+.v-dialog .v-card:hover {
+  transform: none;
+}
+
+.v-card__subtitle {
+  color: $text-secondary !important;
+}
+
+.v-card__title {
+  font-family: var(--font-display) !important;
+  font-weight: 600 !important;
+  font-size: 18px !important;
+  color: $text-primary !important;
+  border-bottom: 1px solid $border;
+  padding: 16px 20px !important;
+}
+
+.v-card__text {
+  color: $text-secondary !important;
+  padding: 20px !important;
+}
+
+.v-card__actions {
+  padding: 12px 20px !important;
+  border-top: 1px solid $border;
+}
+
+.v-pagination {
+  .v-pagination__item,
+  .v-pagination__navigation {
+    border: 1px solid $border !important;
+    box-shadow: none !important;
+    font-weight: 500 !important;
+    background: $surface !important;
+    color: $text-primary !important;
+    border-radius: 8px !important;
+
+    &:hover {
+      background: $surface-hover !important;
+    }
+  }
+
+  .v-pagination__item--active {
+    background: $primary !important;
+    color: $on-primary !important;
+    border-color: $primary !important;
+  }
+}
+
+.v-chip {
+  border: none !important;
+  font-weight: 500 !important;
+  box-shadow: none !important;
+  border-radius: $radius-badge !important;
+  font-size: 12px !important;
+  height: 24px !important;
+
+  .v-chip__content {
+    color: inherit !important;
+  }
+
+  &.v-chip--outlined {
+    border: 1px solid $border !important;
+    background: $surface !important;
+  }
+}
+
+.theme--light.v-chip.primary,
+.v-chip.primary {
+  background-color: $primary-soft !important;
+  color: $primary !important;
+
+  .v-chip__content { color: $primary !important; }
+}
+
+.theme--light.v-chip.success,
+.v-chip.success {
+  background-color: $success-soft !important;
+  color: $success !important;
+
+  .v-chip__content { color: $success !important; }
+}
+
+.theme--light.v-chip.error,
+.v-chip.error {
+  background-color: $danger-soft !important;
+  color: $danger !important;
+
+  .v-chip__content { color: $danger !important; }
+}
+
+.theme--light.v-chip.warning,
+.v-chip.warning {
+  background-color: $warning-soft !important;
+  color: $warning !important;
+
+  .v-chip__content { color: $warning !important; }
+}
+
+.theme--light.v-chip.info,
+.v-chip.info {
+  background-color: $info-soft !important;
+  color: $info !important;
+
+  .v-chip__content { color: $info !important; }
+}
+
+.v-skeleton-loader {
+  border-radius: 8px !important;
+
+  .v-skeleton-loader__bone {
+    background: linear-gradient(90deg, $surface-secondary 25%, var(--skeleton-mid) 50%, $surface-secondary 75%) !important;
+  }
+}
+
+.v-file-input {
+  .v-input__slot {
+    border: 1px dashed $border-strong !important;
+    background: $surface-secondary !important;
+  }
+}
+
+.vue-star-rating {
+  .vue-star-rating-star svg {
+    width: 18px !important;
+  }
+}
+
+.note-editor,
+.note-toolbar {
+  border: 1px solid $border !important;
+  border-radius: $radius-input !important;
+  box-shadow: none !important;
+}
+
+.v-picker {
+  border: 1px solid $border !important;
+  border-radius: $radius-modal !important;
+  box-shadow: $shadow-sm !important;
+  overflow: hidden;
+
+  .v-date-picker-header {
+    background: $surface-secondary;
+    color: $text-primary;
+    direction: ltr !important;
+
+    .v-btn.v-btn--icon {
+      width: 36px !important;
+      height: 36px !important;
+      min-width: 36px !important;
+      border-radius: 50% !important;
+      border: 1px solid $border !important;
+      background: $surface !important;
+      box-shadow: none !important;
+
+      .v-icon {
+        font-size: 22px !important;
+        color: $text-primary !important;
+      }
+
+      &:hover {
+        border-color: $primary !important;
+        background: $surface-hover !important;
+
+        .v-icon {
+          color: $primary !important;
+        }
+      }
+    }
+  }
+
+  .v-date-picker-table {
+    .v-btn--active {
+      background: $primary !important;
+      color: $on-primary !important;
+    }
+  }
+}
+
+.v-expansion-panel {
+  border: 1px solid $border !important;
+  margin-bottom: 8px !important;
+  border-radius: 10px !important;
+  box-shadow: none !important;
+
+  &::before {
+    box-shadow: none !important;
+  }
+
+  &-header {
+    font-family: var(--font-display);
+    font-weight: 600;
+    color: $text-primary !important;
+  }
+}
+
+.v-tooltip__content {
+  background: $text-primary !important;
+  color: $background !important;
+  border: none;
+  font-weight: 500;
+  font-size: 12px;
+  border-radius: 6px !important;
+}
+
+.mdi-arrow-left-circle-outline,
+.mdi-arrow-right-circle-outline {
+  color: $primary !important;
+  font-size: 22px !important;
+}
+
+.v-alert {
+  border-radius: 10px !important;
+  box-shadow: none !important;
+  font-size: 14px;
+}
+
+.theme--light.v-alert.info {
+  background: $info-soft !important;
+  color: $info !important;
+  border: 1px solid $border !important;
+}
+
+.theme--light.v-alert.success {
+  background: $success-soft !important;
+  color: $success !important;
+}
+
+.theme--light.v-alert.error {
+  background: $danger-soft !important;
+  color: $danger !important;
+}
+
+.theme--light.v-alert.warning {
+  background: $warning-soft !important;
+  color: $warning !important;
+}

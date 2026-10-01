@@ -1,0 +1,357 @@
+// ═══════════════════════════════════════════════════
+//  TeamPulse design tokens — light & dark
+//  Semantic CSS variables; SCSS aliases resolve to var()
+// ═══════════════════════════════════════════════════
+
+// Light palette (brand)
+$light-background: #f7f8fa;
+$light-surface: #ffffff;
+$light-surface-secondary: #f2f4f7;
+$light-surface-hover: #eef1f5;
+$light-border: #e5e7eb;
+$light-border-strong: #d1d5db;
+$light-text-primary: #17202a;
+$light-text-secondary: #667085;
+$light-text-muted: #98a2b3;
+$light-primary: #315c56;
+$light-primary-hover: #284c47;
+$light-primary-soft: #eaf2f0;
+$light-primary-light: #4a7a73;
+$light-on-primary: #ffffff;
+$light-success: #36785b;
+$light-success-soft: #e8f3ee;
+$light-warning: #b7791f;
+$light-warning-soft: #f8f1e3;
+$light-danger: #b54747;
+$light-danger-soft: #f8eaea;
+$light-info: #426b8a;
+$light-info-soft: #e8eef3;
+$light-overlay: rgba(16, 24, 40, 0.46);
+$light-skeleton-mid: #e9edf2;
+$light-shadow-xs: 0 1px 2px rgba(16, 24, 40, 0.04);
+$light-shadow-sm: 0 2px 8px rgba(16, 24, 40, 0.06);
+$light-shadow-md: 0 8px 24px rgba(16, 24, 40, 0.1);
+
+// Dark palette — layered teal-neutral, not inverted light
+$dark-background: #12171a;
+$dark-surface: #1b2226;
+$dark-surface-secondary: #232b30;
+$dark-surface-hover: #2b343a;
+$dark-border: #2f3a40;
+$dark-border-strong: #3d4b52;
+$dark-text-primary: #e6edf0;
+$dark-text-secondary: #9aabb4;
+$dark-text-muted: #7a8a93;
+$dark-primary: #5e938b;
+$dark-primary-hover: #70a59d;
+$dark-primary-soft: rgba(94, 147, 139, 0.18);
+$dark-primary-light: #70a59d;
+$dark-on-primary: #ffffff;
+$dark-success: #5a9a78;
+$dark-success-soft: rgba(90, 154, 120, 0.18);
+$dark-warning: #d4a04a;
+$dark-warning-soft: rgba(212, 160, 74, 0.18);
+$dark-danger: #d16a6a;
+$dark-danger-soft: rgba(209, 106, 106, 0.18);
+$dark-info: #6a92b0;
+$dark-info-soft: rgba(106, 146, 176, 0.18);
+$dark-overlay: rgba(8, 12, 14, 0.72);
+$dark-skeleton-mid: #2b343a;
+$dark-shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.28);
+$dark-shadow-sm: 0 4px 16px rgba(0, 0, 0, 0.36);
+$dark-shadow-md: 0 12px 32px rgba(0, 0, 0, 0.48);
+
+@mixin theme-vars(
+  $background,
+  $surface,
+  $surface-secondary,
+  $surface-hover,
+  $border,
+  $border-strong,
+  $text-primary,
+  $text-secondary,
+  $text-muted,
+  $primary,
+  $primary-hover,
+  $primary-soft,
+  $primary-light,
+  $on-primary,
+  $success,
+  $success-soft,
+  $warning,
+  $warning-soft,
+  $danger,
+  $danger-soft,
+  $info,
+  $info-soft,
+  $overlay,
+  $skeleton-mid,
+  $shadow-xs,
+  $shadow-sm,
+  $shadow-md
+) {
+  --background: #{$background};
+  --foreground: #{$text-primary};
+  --surface: #{$surface};
+  --surface-secondary: #{$surface-secondary};
+  --surface-hover: #{$surface-hover};
+  --card: #{$surface};
+  --card-hover: #{$surface-hover};
+  --muted: #{$surface-secondary};
+  --muted-foreground: #{$text-muted};
+  --border: #{$border};
+  --border-strong: #{$border-strong};
+  --input: #{$surface};
+  --ring: #{$primary};
+
+  --text-primary: #{$text-primary};
+  --text-secondary: #{$text-secondary};
+  --text-muted: #{$text-muted};
+
+  --primary: #{$primary};
+  --primary-hover: #{$primary-hover};
+  --primary-soft: #{$primary-soft};
+  --primary-light: #{$primary-light};
+  --primary-foreground: #{$on-primary};
+  --on-primary: #{$on-primary};
+
+  --secondary: #{$surface-secondary};
+  --secondary-foreground: #{$text-primary};
+  --accent: #{$primary-light};
+  --accent-foreground: #{$on-primary};
+
+  --success: #{$success};
+  --success-soft: #{$success-soft};
+  --success-foreground: #{$on-primary};
+  --warning: #{$warning};
+  --warning-soft: #{$warning-soft};
+  --warning-foreground: #{$on-primary};
+  --danger: #{$danger};
+  --danger-soft: #{$danger-soft};
+  --destructive: #{$danger};
+  --destructive-foreground: #{$on-primary};
+  --info: #{$info};
+  --info-soft: #{$info-soft};
+  --info-foreground: #{$on-primary};
+
+  --overlay: #{$overlay};
+  --skeleton-mid: #{$skeleton-mid};
+
+  --frost: #{$background};
+  --deep: #{$text-primary};
+  --cream-base: #{$background};
+  --ink: #{$text-primary};
+  --ink-soft: #{$text-secondary};
+  --cream: #{$background};
+  --cream-dark: #{$surface-secondary};
+  --cream-light: #{$background};
+  --terracotta: #{$primary};
+  --terracotta-light: #{$primary-light};
+  --sage: #{$success};
+  --muted-legacy: #{$text-secondary};
+
+  --shadow-xs: #{$shadow-xs};
+  --shadow-sm: #{$shadow-sm};
+  --shadow-md: #{$shadow-md};
+  --shadow-brutal: #{$shadow-xs};
+  --shadow-brutal-lg: #{$shadow-sm};
+}
+
+:root {
+  @include theme-vars(
+    $light-background,
+    $light-surface,
+    $light-surface-secondary,
+    $light-surface-hover,
+    $light-border,
+    $light-border-strong,
+    $light-text-primary,
+    $light-text-secondary,
+    $light-text-muted,
+    $light-primary,
+    $light-primary-hover,
+    $light-primary-soft,
+    $light-primary-light,
+    $light-on-primary,
+    $light-success,
+    $light-success-soft,
+    $light-warning,
+    $light-warning-soft,
+    $light-danger,
+    $light-danger-soft,
+    $light-info,
+    $light-info-soft,
+    $light-overlay,
+    $light-skeleton-mid,
+    $light-shadow-xs,
+    $light-shadow-sm,
+    $light-shadow-md
+  );
+
+  --radius-sm: 8px;
+  --radius-md: 10px;
+  --radius-lg: 12px;
+  --radius-badge: 6px;
+
+  --font-display: 'IBM Plex Sans', sans-serif;
+  --font-body: 'IBM Plex Sans', sans-serif;
+  --font-ar: 'Cairo', sans-serif;
+
+  --sidebar-width: 252px;
+  --header-height: 64px;
+  --transition: 0.16s ease;
+
+  color-scheme: light;
+}
+
+html.theme-dark,
+html[data-theme='dark'] {
+  @include theme-vars(
+    $dark-background,
+    $dark-surface,
+    $dark-surface-secondary,
+    $dark-surface-hover,
+    $dark-border,
+    $dark-border-strong,
+    $dark-text-primary,
+    $dark-text-secondary,
+    $dark-text-muted,
+    $dark-primary,
+    $dark-primary-hover,
+    $dark-primary-soft,
+    $dark-primary-light,
+    $dark-on-primary,
+    $dark-success,
+    $dark-success-soft,
+    $dark-warning,
+    $dark-warning-soft,
+    $dark-danger,
+    $dark-danger-soft,
+    $dark-info,
+    $dark-info-soft,
+    $dark-overlay,
+    $dark-skeleton-mid,
+    $dark-shadow-xs,
+    $dark-shadow-sm,
+    $dark-shadow-md
+  );
+
+  color-scheme: dark;
+}
+
+html[lang='ar'],
+html[dir='rtl'] {
+  --font-display: 'Cairo', sans-serif;
+  --font-body: 'Cairo', sans-serif;
+}
+
+// Semantic SCSS tokens — compile to CSS variables so both themes work
+$background: var(--background);
+$surface: var(--surface);
+$surface-secondary: var(--surface-secondary);
+$surface-hover: var(--surface-hover);
+$border: var(--border);
+$border-strong: var(--border-strong);
+
+$text-primary: var(--text-primary);
+$text-secondary: var(--text-secondary);
+$text-muted: var(--text-muted);
+
+$primary: var(--primary);
+$primary-hover: var(--primary-hover);
+$primary-soft: var(--primary-soft);
+$on-primary: var(--on-primary);
+
+$success: var(--success);
+$success-soft: var(--success-soft);
+$warning: var(--warning);
+$warning-soft: var(--warning-soft);
+$danger: var(--danger);
+$danger-soft: var(--danger-soft);
+$info: var(--info);
+$info-soft: var(--info-soft);
+
+// Legacy aliases — keep existing SCSS compiling
+$frost: $background;
+$frost-deep: $surface-secondary;
+$frost-mist: var(--border);
+$primary-blue: $primary;
+$primary-light: var(--primary-light);
+$primary-dark: $primary-hover;
+$deep: $text-primary;
+$deep-soft: $text-secondary;
+$accent: $primary-light;
+$on-dark: $on-primary;
+
+$cream-base: $background;
+$cream: $background;
+$cream-dark: $surface-secondary;
+$cream-light: $background;
+$highlight: $primary-soft;
+$blue: $primary;
+$brown: $text-primary;
+$peach: $primary;
+$sky: $background;
+$navy: $text-primary;
+$ink: $text-primary;
+$ink-soft: $text-secondary;
+$terracotta: $primary;
+$terracotta-light: $primary-light;
+$terracotta-dark: $primary-hover;
+$sage: $success;
+$sage-light: $success;
+$gold: $warning;
+$coral: $primary-light;
+$muted: $text-secondary;
+$sand: $text-muted;
+
+$secondary: $text-primary;
+$mainColor: $primary;
+$activeColor: $primary-soft;
+$label: $text-secondary;
+$text: $text-primary;
+$textcolor: $text-secondary;
+$stroke: $border-strong;
+$icons: $text-muted;
+$error: $danger;
+
+$bg: $background;
+$bg-surface: $surface;
+$sidebar-bg: $surface;
+$sidebar-text: $text-secondary;
+$sidebar-active: $primary;
+
+$shadow-xs: var(--shadow-xs);
+$shadow-sm: var(--shadow-sm);
+$shadow-md: var(--shadow-md);
+
+$mainBoxShadow: $shadow-xs;
+$mainBoxShadow-sm: none;
+$mainBoxShadow-lg: $shadow-sm;
+$mainBoxShadow-hover: $shadow-xs;
+
+$ownTransition: 0.16s ease;
+
+$extraSmall: '(max-width: 600px)';
+$small: '(min-width: 600px)';
+$minMedium: '(min-width: 960px)';
+$minLarge: '(min-width: 1264px)';
+$extraLarge: '(min-width: 1904px)';
+
+$chart-colors: $primary, $info, $success, $warning, $text-secondary;
+
+$space-1: 4px;
+$space-2: 8px;
+$space-3: 12px;
+$space-4: 16px;
+$space-5: 20px;
+$space-6: 24px;
+$space-8: 32px;
+$space-10: 40px;
+$space-12: 48px;
+
+$radius-input: 8px;
+$radius-btn: 8px;
+$radius-card: 10px;
+$radius-modal: 12px;
+$radius-badge: 6px;

@@ -1,0 +1,576 @@
+.box,
+.box-report,
+.box-showDetails {
+  border: 1px solid $border !important;
+  border-radius: $radius-card !important;
+  box-shadow: none !important;
+  background: $surface !important;
+  transition: border-color $ownTransition;
+
+  &:hover {
+    box-shadow: none !important;
+  }
+}
+
+.taskinProject {
+  margin-top: 24px;
+  padding: 16px 20px !important;
+  border: 1px solid $border !important;
+  border-radius: $radius-card !important;
+  box-shadow: none !important;
+  background: $surface !important;
+
+  > .d-flex {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .projectDetails {
+    flex: 1 1 200px;
+    min-width: 0;
+  }
+
+  .task-card-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+    flex-shrink: 0;
+    margin-left: auto;
+  }
+
+  .btn-view,
+  .btn-delete {
+    width: auto !important;
+    min-width: 0;
+    margin: 0 !important;
+  }
+}
+
+.showProject {
+  .project-delete-wrap {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+
+    .btn-delete {
+      min-width: 110px;
+    }
+  }
+
+  .task-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+
+    &__content {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .btn-delete {
+      flex-shrink: 0;
+    }
+  }
+
+  .subtask-item {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+
+    #checklist {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .btn-delete {
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+  }
+
+  .attachment-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    width: 100%;
+
+    .btn-edit,
+    .btn-delete {
+      flex: 1 1 calc(50% - 5px);
+      max-width: calc(50% - 5px);
+    }
+  }
+}
+
+.box-report {
+  padding: 16px 20px !important;
+
+  .groupOne h3 {
+    color: $text-secondary !important;
+    font-size: 13px;
+    font-weight: 500;
+    font-family: var(--font-display);
+    margin: 0;
+  }
+
+  .groupOne span,
+  .groupTwo span {
+    color: $text-secondary !important;
+    font-size: 14px;
+  }
+}
+
+.box-showDetails {
+  padding: 20px;
+  border-radius: $radius-card !important;
+
+  p {
+    color: $text-primary !important;
+    font-weight: 500;
+  }
+}
+
+.boxActivity {
+  h2, h3 {
+    color: $text-primary !important;
+    font-family: var(--font-display);
+  }
+
+  .activity,
+  .shadowCard {
+    border: 1px solid $border !important;
+    border-radius: $radius-card !important;
+    box-shadow: none !important;
+    background: $surface !important;
+  }
+}
+
+.btn-view {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: $radius-btn !important;
+  border: 1px solid $border !important;
+  color: $primary !important;
+  background: $surface !important;
+  font-weight: 500 !important;
+  font-family: var(--font-display);
+  padding: 6px 12px !important;
+  min-height: 36px;
+  box-shadow: none;
+  transition: background $ownTransition, border-color $ownTransition;
+  text-align: center;
+  cursor: pointer;
+
+  &:hover {
+    background: $primary-soft !important;
+    color: $primary !important;
+    border-color: $primary-soft !important;
+    box-shadow: none;
+    transform: none;
+  }
+}
+
+.card-item {
+  padding: 16px 20px !important;
+
+  .btn-view {
+    background: $primary !important;
+    color: $on-primary !important;
+    border: none !important;
+    border-radius: $radius-btn !important;
+    padding: 6px 14px !important;
+    box-shadow: none;
+    width: auto;
+  }
+
+  .btn-actions {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    width: auto;
+
+    .btn-delete {
+      width: auto !important;
+    }
+  }
+
+  .dayLimit {
+    color: $danger !important;
+    font-size: 12px;
+    font-weight: 500;
+    background: $danger-soft;
+    padding: 2px 8px;
+    border-radius: $radius-badge;
+    border: none;
+  }
+}
+
+.v-simple-table,
+.tableTeam {
+  border: 1px solid $border !important;
+  border-radius: $radius-card !important;
+  box-shadow: none !important;
+  overflow: hidden;
+  background: $surface !important;
+
+  table {
+    width: 100%;
+  }
+
+  thead tr th {
+    background: $surface-secondary !important;
+    color: $text-secondary !important;
+    font-family: var(--font-display) !important;
+    font-weight: 500 !important;
+    font-size: 12px !important;
+    text-transform: none;
+    letter-spacing: 0 !important;
+    border-bottom: 1px solid $border !important;
+    padding: 12px 16px !important;
+    height: 44px;
+  }
+
+  tbody tr {
+    transition: background $ownTransition;
+
+    &:hover {
+      background: $surface-hover !important;
+    }
+
+    &:nth-child(even) {
+      background: transparent;
+    }
+  }
+
+  tbody tr td {
+    color: $text-primary !important;
+    font-size: 14px !important;
+    font-weight: 400;
+    border-bottom: 1px solid $border !important;
+    padding: 12px 16px !important;
+    height: 48px;
+  }
+}
+
+.switch {
+  font-size: 17px;
+  position: relative;
+  display: inline-block;
+  width: 3.5em;
+  height: 2em;
+
+  input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    inset: 0;
+    background: $border-strong;
+    border: none;
+    transition: $ownTransition;
+    border-radius: 999px;
+    box-shadow: none;
+
+    &:before {
+      position: absolute;
+      content: '';
+      height: 1.2em;
+      width: 1.2em;
+      border-radius: 50%;
+      left: 0.25em;
+      bottom: 0.32em;
+      background: $surface;
+      border: none;
+      box-shadow: $shadow-xs;
+      transition: $ownTransition;
+    }
+  }
+
+  input:checked + .slider {
+    background: $primary;
+    box-shadow: none;
+  }
+
+  input:focus + .slider {
+    box-shadow: 0 0 0 3px $primary-soft;
+  }
+
+  input:checked + .slider:before {
+    transform: translateX(1.4em);
+    background: $surface;
+  }
+}
+
+.cyberpunk-checkbox {
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border: 1px solid $border-strong;
+  border-radius: 4px;
+  background: $surface;
+  display: inline-block;
+  position: relative;
+  margin-right: 10px;
+  cursor: pointer;
+  box-shadow: none;
+  transition: $ownTransition;
+
+  &:before {
+    content: '';
+    background: $surface;
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    width: 8px;
+    height: 8px;
+    border-radius: 2px;
+    transition: $ownTransition;
+  }
+
+  &:checked {
+    background: $primary;
+    border-color: $primary;
+
+    &:before {
+      transform: translate(-50%, -50%) scale(1);
+      background: $surface;
+    }
+  }
+}
+
+.cyberpunk-checkbox-label {
+  font-size: 14px;
+  color: $text-primary !important;
+  font-weight: 500;
+  cursor: pointer;
+  user-select: none;
+  display: flex;
+  align-items: center;
+}
+
+.checklist {
+  --background: #{$surface};
+  --text: #{$text-primary};
+  --check: #{$primary};
+  --disabled: #{$text-muted};
+  --border-radius: 8px;
+  width: fit-content;
+  display: grid;
+  grid-template-columns: 30px auto;
+  align-items: center;
+}
+
+.img-circle,
+.progress img {
+  border: 1px solid $border !important;
+  box-shadow: none;
+  object-fit: cover;
+}
+
+.progress {
+  img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+  }
+
+  h3 {
+    font-family: var(--font-display);
+    font-size: 14px;
+    font-weight: 600;
+    color: $text-primary;
+  }
+
+  p, span {
+    color: $text-secondary !important;
+    font-size: 13px;
+  }
+}
+
+.list-group-item {
+  cursor: grab;
+
+  &:active {
+    cursor: grabbing;
+  }
+}
+
+.flex-50 {
+  flex: 0 0 50%;
+}
+
+.w-13 {
+  width: 13% !important;
+}
+
+.projectDetails {
+  flex: 0 0 20%;
+}
+
+.attachment,
+.tasks,
+.showProject .attachment,
+.showProject .tasks {
+  padding: 16px 20px !important;
+  border: 1px solid $border !important;
+  border-radius: $radius-card !important;
+  box-shadow: none !important;
+  background: $surface !important;
+
+  .imageProject {
+    border-radius: 8px;
+    border: 1px solid $border;
+  }
+}
+
+.checkmark {
+  display: block;
+  width: 22px;
+  height: 22px;
+  background-color: $surface;
+  border: 1px solid $border-strong;
+  border-radius: 6px;
+  position: relative;
+  transition: $ownTransition;
+  overflow: hidden;
+  cursor: pointer;
+  box-shadow: none;
+}
+
+.check:checked ~ .checkmark {
+  background-color: $primary;
+  border-color: $primary;
+}
+
+.section .section-title {
+  color: $text-primary !important;
+}
+
+.createProject,
+.createReport,
+.showProject,
+.projects,
+.reports,
+.todo,
+.myPanel {
+  color: $text-primary;
+}
+
+a[nuxt-link],
+.nuxt-link-active {
+  transition: $ownTransition;
+}
+
+label.mr-5,
+label.ml-5 {
+  font-family: var(--font-display) !important;
+  font-weight: 500 !important;
+  font-size: 13px !important;
+  color: $text-secondary !important;
+}
+
+.app-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 48px 24px;
+  color: $text-secondary;
+
+  &__icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 10px;
+    background: $surface-secondary;
+    color: $text-muted;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
+
+    .v-icon,
+    .mdi {
+      font-size: 22px;
+      color: inherit;
+    }
+  }
+
+  &__title {
+    font-size: 16px;
+    font-weight: 600;
+    color: $text-primary;
+    margin-bottom: 4px;
+  }
+
+  &__desc {
+    font-size: 14px;
+    color: $text-secondary;
+    max-width: 360px;
+    margin: 0 0 16px;
+  }
+}
+
+.app-page-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 24px;
+
+  &__copy {
+    min-width: 0;
+    flex: 1;
+  }
+
+  &__title {
+    font-size: 28px;
+    line-height: 32px;
+    font-weight: 600;
+    color: $text-primary;
+    margin: 0;
+  }
+
+  &__desc {
+    margin: 8px 0 0;
+    font-size: 14px;
+    line-height: 20px;
+    color: $text-secondary;
+  }
+
+  &__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+  }
+}
+
+.app-status {
+  display: inline-flex;
+  align-items: center;
+  height: 22px;
+  padding: 0 8px;
+  border-radius: $radius-badge;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 18px;
+
+  &--success { background: $success-soft; color: $success; }
+  &--warning { background: $warning-soft; color: $warning; }
+  &--danger { background: $danger-soft; color: $danger; }
+  &--info { background: $info-soft; color: $info; }
+  &--neutral { background: $surface-secondary; color: $text-secondary; }
+}

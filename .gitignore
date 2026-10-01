@@ -1,0 +1,16 @@
+# Dependencies and generated Nuxt output
+node_modules/
+.nuxt/
+.output/
+dist/
+
+# Local package-manager cache
+.npm-cache/
+
+# Local environment and operating-system files
+.env
+.env.*
+!.env.example
+.DS_Store
+Thumbs.db
+Desktop.ini

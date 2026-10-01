@@ -1,0 +1,268 @@
+.locale-switch-row {
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
+  padding-inline: 16px;
+}
+
+.locale-switch,
+.theme-switch {
+  position: static;
+  min-width: 76px;
+  min-height: 36px;
+  padding: 0 12px;
+  border: 1px solid $border;
+  border-radius: 999px;
+  background: $surface;
+  color: $primary;
+  box-shadow: $shadow-sm;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+
+  &:hover {
+    background: $primary-soft;
+  }
+}
+
+.theme-switch {
+  color: $text-secondary;
+}
+
+.projects {
+  padding: 8px 0 32px;
+
+  .projects-toolbar {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 14px;
+    padding: 18px 20px;
+    margin-bottom: 22px;
+    border: 1px solid $border;
+    border-radius: $radius-card;
+    background: $surface;
+    box-shadow: $shadow-sm;
+
+    .section-title {
+      margin: 0;
+      font-size: 21px;
+      line-height: 1.4;
+      text-align: right;
+    }
+
+    &__actions {
+      display: flex;
+      align-items: flex-end;
+      gap: 10px;
+      width: 100% !important;
+      flex-basis: 100%;
+      min-width: 0;
+    }
+
+    &__field {
+      width: 100% !important;
+      min-width: 0;
+      flex: 1 1 650px;
+      margin: 0;
+
+      .v-text-field {
+        width: 100%;
+        max-width: none;
+      }
+
+      .rms-labeled-field__label {
+        margin-bottom: 5px;
+        color: $text-secondary;
+        font-size: 12px;
+      }
+    }
+
+    &__filter-toggle,
+    &__reset {
+      min-height: 40px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      padding: 0 13px;
+      border: 1px solid $border;
+      border-radius: $radius-btn;
+      background: $surface;
+      color: $text-secondary;
+      font: inherit;
+      font-size: 13px;
+      cursor: pointer;
+      white-space: nowrap;
+
+      &:hover {
+        border-color: $border-strong;
+        background: $surface-secondary;
+      }
+    }
+
+    &__filter-count {
+      min-width: 20px;
+      height: 20px;
+      display: inline-grid;
+      place-items: center;
+      padding: 0 5px;
+      border-radius: 10px;
+      background: $primary-soft;
+      color: $primary;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    &__advanced {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr)) auto;
+      align-items: flex-end;
+      gap: 12px;
+      width: 100%;
+      padding-top: 14px;
+      border-top: 1px solid $border;
+    }
+
+    &__reset {
+      border-color: transparent;
+      color: $primary;
+    }
+  }
+
+  .kanban-board {
+    row-gap: 22px;
+  }
+
+  .kanban-column-header {
+    min-height: 36px;
+    padding-inline: 2px;
+    border-bottom-color: $border;
+  }
+
+  .kanban-col-title {
+    font-size: 14px;
+  }
+
+  .project-kanban-card {
+    gap: 13px;
+    padding: 16px;
+    border-color: $border;
+    border-radius: $radius-card;
+    box-shadow: $shadow-sm;
+    transition: border-color $ownTransition, box-shadow $ownTransition, transform $ownTransition;
+
+    &:hover {
+      transform: translateY(-2px);
+      border-color: $border-strong;
+      box-shadow: $shadow-md;
+    }
+
+    &__ticket {
+      font-size: 11px;
+      direction: ltr;
+      text-align: right;
+    }
+
+    &__dates {
+      font-size: 11px;
+    }
+
+    &__label {
+      color: $text-muted;
+      font-size: 11px;
+    }
+
+    &__foot {
+      gap: 9px;
+      padding-top: 11px;
+    }
+
+    &__meta {
+      gap: 12px;
+      color: $text-muted;
+      font-size: 11px;
+    }
+
+    &__actions {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 36px;
+      align-items: center;
+      gap: 7px;
+    }
+
+    &__btn {
+      min-height: 36px !important;
+      font-size: 12px !important;
+    }
+
+    &__btn.btn-delete {
+      min-width: 36px !important;
+      width: 36px !important;
+      padding: 0 !important;
+      font-size: 0 !important;
+
+      &::before {
+        content: '\F01B4';
+        font-family: 'Material Design Icons';
+        font-size: 17px;
+      }
+    }
+  }
+}
+
+@media (max-width: 959px) {
+  .projects .projects-toolbar__advanced {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 612px) {
+  .projects {
+    padding-top: 0;
+
+    .projects-toolbar {
+      padding: 16px;
+      gap: 12px;
+
+      .section-title {
+        font-size: 19px;
+      }
+
+      &__actions {
+        grid-template-columns: minmax(0, 1fr) auto;
+        display: grid;
+        gap: 8px;
+      }
+
+      &__field {
+        grid-column: 1 / -1;
+        flex-basis: auto;
+      }
+
+      &__create {
+        min-width: 82px;
+      }
+
+      &__advanced {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 10px;
+      }
+
+      &__reset {
+        justify-self: start;
+      }
+    }
+
+    .kanban-board {
+      gap: 14px;
+    }
+  }
+}
