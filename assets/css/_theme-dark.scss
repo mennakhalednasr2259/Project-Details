@@ -22,24 +22,8 @@ html[data-theme='dark'] {
   color: $text-primary !important;
 }
 
-.v-navigation-drawer {
-  background: $surface !important;
-  color: $text-primary !important;
-}
-
 .theme--dark.v-card,
-.theme--dark.v-list,
-.theme--dark.v-navigation-drawer,
-.theme--dark.v-toolbar,
-.theme--dark.v-app-bar,
-.theme--dark.v-footer,
-.theme--dark.v-tabs,
-.theme--dark.v-tabs-bar,
-.theme--dark.v-data-table,
-.theme--dark.v-pagination__item,
-.theme--dark.v-pagination__navigation,
-.theme--dark.v-expansion-panel,
-.theme--dark.v-snackbar__wrapper {
+.theme--dark.v-list {
   background-color: $surface !important;
   color: $text-primary !important;
 }
@@ -81,20 +65,6 @@ html[data-theme='dark'] {
 .theme--dark.v-text-field--outlined fieldset,
 .theme--dark.v-textarea--outlined fieldset {
   border-color: $border !important;
-}
-
-.theme--dark.v-data-table > .v-data-table__wrapper > table > thead > tr > th {
-  background: $surface-secondary !important;
-  color: $text-secondary !important;
-  border-bottom-color: $border !important;
-}
-
-.theme--dark.v-data-table > .v-data-table__wrapper > table > tbody > tr:hover {
-  background: $surface-hover !important;
-}
-
-.theme--dark.v-data-table > .v-data-table__wrapper > table > tbody > tr:hover:not(.v-data-table__expanded__content) {
-  background: $surface-hover !important;
 }
 
 .theme--light.v-chip.primary,
@@ -142,41 +112,6 @@ html[data-theme='dark'] {
   .v-chip__content { color: $info !important; }
 }
 
-.theme--light.v-alert.info,
-.theme--dark.v-alert.info,
-.v-alert.info {
-  background: $info-soft !important;
-  color: $info !important;
-  border: 1px solid $border !important;
-}
-
-.theme--light.v-alert.success,
-.theme--dark.v-alert.success,
-.v-alert.success {
-  background: $success-soft !important;
-  color: $success !important;
-}
-
-.theme--light.v-alert.error,
-.theme--dark.v-alert.error,
-.v-alert.error {
-  background: $danger-soft !important;
-  color: $danger !important;
-}
-
-.theme--light.v-alert.warning,
-.theme--dark.v-alert.warning,
-.v-alert.warning {
-  background: $warning-soft !important;
-  color: $warning !important;
-}
-
-.v-alert a {
-  color: inherit !important;
-  font-weight: 600;
-  text-decoration: underline;
-}
-
 .theme--dark.v-picker,
 .theme--dark.v-picker__body,
 .theme--dark.v-date-picker-table,
@@ -203,93 +138,8 @@ html[data-theme='dark'] {
   color: $text-muted !important;
 }
 
-.theme-toggle-btn {
-  width: 32px !important;
-  height: 32px !important;
-  min-width: 32px !important;
-  min-height: 32px !important;
-  padding: 0 !important;
-  border: 1px solid $border !important;
-  border-radius: $radius-btn !important;
-  background: $surface !important;
-  box-shadow: none !important;
-  margin: 0 !important;
-
-  .v-icon {
-    font-size: 18px !important;
-    color: $text-primary !important;
-  }
-
-  &:hover {
-    background: $surface-secondary !important;
-    border-color: $border-strong !important;
-  }
-
-  &--plain {
-    background: $surface !important;
-  }
-}
-
-.appearance-options {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 12px;
-
-  @media (max-width: 600px) {
-    grid-template-columns: 1fr;
-  }
-}
-
-.appearance-option {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 8px;
-  padding: 12px 14px;
-  border: 1px solid $border;
-  border-radius: $radius-card;
-  background: $surface;
-  color: $text-primary;
-  cursor: pointer;
-  text-align: start;
-  font-family: inherit;
-  transition: border-color $ownTransition, background $ownTransition;
-
-  .v-icon {
-    color: $text-secondary !important;
-  }
-
-  &:hover {
-    border-color: $border-strong;
-    background: $surface-hover;
-  }
-
-  &.is-active {
-    border-color: $primary;
-    background: $primary-soft;
-
-    .v-icon {
-      color: $primary !important;
-    }
-  }
-
-  strong {
-    font-size: 14px;
-    font-weight: 600;
-  }
-
-  span {
-    font-size: 12px;
-    color: $text-secondary;
-  }
-}
-
 .ql-toolbar.ql-snow,
-.ql-container.ql-snow,
-.note-editor,
-.note-toolbar,
-.note-editing-area,
-.note-editable {
+.ql-container.ql-snow {
   background: $surface !important;
   color: $text-primary !important;
   border-color: $border !important;
@@ -308,8 +158,7 @@ html[data-theme='dark'] {
 }
 
 .ql-snow .ql-picker-label,
-.ql-editor,
-.note-editable {
+.ql-editor {
   color: $text-primary !important;
 }
 
@@ -317,45 +166,12 @@ html[data-theme='dark'] {
   color: $text-muted !important;
 }
 
-.ql-snow .ql-picker-options,
-.note-dropdown-menu {
+.ql-snow .ql-picker-options {
   background: $surface !important;
   border: 1px solid $border !important;
   color: $text-primary !important;
 }
 
-.apexcharts-tooltip {
-  background: $surface !important;
-  color: $text-primary !important;
-  border: 1px solid $border !important;
-  box-shadow: $shadow-sm !important;
-}
-
-.apexcharts-tooltip-title {
-  background: $surface-secondary !important;
-  color: $text-primary !important;
-  border-bottom: 1px solid $border !important;
-}
-
-.apexcharts-gridline {
-  stroke: $border !important;
-}
-
-.apexcharts-xaxis-label,
-.apexcharts-yaxis-label,
-.apexcharts-legend-text,
-.apexcharts-datalabel,
-.apexcharts-text {
-  fill: $text-secondary !important;
-  color: $text-secondary !important;
-}
-
-.apexcharts-yaxis-title-text,
-.apexcharts-xaxis-title-text {
-  fill: $text-primary !important;
-}
-
-.v-skeleton-loader .v-skeleton-loader__bone,
 .app-skeleton__line,
 .app-skeleton__card,
 .app-skeleton__block {
@@ -382,21 +198,3 @@ html.theme-dark {
   }
 }
 
-html.theme-dark .grey--text,
-html.theme-dark .grey--text.text--lighten-1,
-html.theme-dark .grey--text.text--darken-1,
-html.theme-dark .grey--text.text--darken-2 {
-  color: $text-secondary !important;
-}
-
-html.theme-dark .black--text {
-  color: $text-primary !important;
-}
-
-.dp__theme_light,
-.dp__theme_dark,
-.dp__menu {
-  background: $surface !important;
-  color: $text-primary !important;
-  border-color: $border !important;
-}

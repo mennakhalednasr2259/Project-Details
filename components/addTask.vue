@@ -6,7 +6,6 @@
         <p>{{ isEdit ? $t('Update task details and deadline') : $t('Create a task and assign it to a team') }}</p>
       </header>
 
-      <feature-limit-notice v-if="!isEdit" feature="tasks" />
 
       <v-row dense>
         <v-col cols="12" sm="6">

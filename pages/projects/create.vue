@@ -4,7 +4,6 @@
       <div class="section">
         <h2 class="section-title">{{ $t('Create Project') }}</h2>
       </div>
-      <feature-limit-notice feature="projects" />
       <v-form ref="form" v-model="valid" lazy-validation>
         <v-row>
           <v-col cols="12" md="6">

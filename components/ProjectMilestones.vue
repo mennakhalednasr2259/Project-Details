@@ -15,12 +15,11 @@
         item-text="text"
         item-value="value"
         class="status-select"
-        :disabled="!canManage"
         @change="update(m)"
       />
       <span class="flex-grow-1">{{ milestoneName(m) }}</span>
       <small v-if="m.due_date">{{ formatDayDate(m.due_date) }}</small>
-      <v-btn v-if="canManage" icon x-small :aria-label="$t('Delete')" @click="remove(m.id)"><v-icon small>mdi-delete</v-icon></v-btn>
+      <v-btn icon x-small :aria-label="$t('Delete')" @click="remove(m.id)"><v-icon small>mdi-delete</v-icon></v-btn>
     </div>
     <v-dialog v-model="deleteDialog" max-width="380">
       <v-card class="pa-5">
@@ -31,7 +30,7 @@
         </div>
       </v-card>
     </v-dialog>
-    <div v-if="canManage" class="milestone-add d-flex align-items-center mt-2">
+    <div class="milestone-add d-flex align-items-center mt-2">
       <v-text-field
         v-model="form.name"
         dense
@@ -57,7 +56,6 @@ export default {
   name: 'ProjectMilestones',
   props: {
     projectId: { type: [Number, String], required: true },
-    canManage: { type: Boolean, default: false },
   },
   data() {
     return {
@@ -111,7 +109,6 @@ export default {
       }
     },
     async add() {
-      if (!this.canManage) return
       if (!String(this.form.name || '').trim()) {
         this.$toast && this.$toast.error(this.$t('Name is required'))
         return
@@ -132,7 +129,6 @@ export default {
       }
     },
     async update(m) {
-      if (!this.canManage) return
       try {
         await this.$axios.put(`/projects/${this.projectId}/milestones/${m.id}`, m, { headers: this.headers() })
         await this.load()
@@ -142,12 +138,11 @@ export default {
       }
     },
     remove(id) {
-      if (!this.canManage) return
       this.deleteTarget = id
       this.deleteDialog = true
     },
     async confirmRemove() {
-      if (!this.canManage || this.deleteTarget == null || this.deleting) return
+      if (this.deleteTarget == null || this.deleting) return
       this.deleting = true
       try {
         await this.$axios.delete(`/projects/${this.projectId}/milestones/${this.deleteTarget}`, { headers: this.headers() })

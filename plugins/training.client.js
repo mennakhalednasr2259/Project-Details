@@ -286,7 +286,6 @@ function handle(method, url, body, config = {}) {
   }
 
   if (method === 'get') {
-    if (path === 'settings') return Promise.resolve(response({ id: 1, permissions: [19,20,21,22,23,24,25,26,27,28,29,30].map(id => ({ id })), roles: [{ id: 1 }] }))
     if (path === 'teams') return Promise.resolve(response(state.teams.map(({ id, name, name_en }) => ({ id, name, name_en }))))
     if (path === 'team/members') return Promise.resolve(response(state.teams))
     if (path === 'projects') {

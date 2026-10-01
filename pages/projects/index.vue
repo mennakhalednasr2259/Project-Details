@@ -27,7 +27,6 @@
             <span v-if="activeFilterCount" class="projects-toolbar__filter-count">{{ activeFilterCount }}</span>
           </button>
           <nuxt-link
-            v-if="idPermission(19)"
             :to="localePath('/projects/create')"
             class="btn btn-create projects-toolbar__create"
           >{{ $t('Create') }}</nuxt-link>
@@ -74,7 +73,7 @@
           >{{ $t('Reset Filters') }}</button>
         </div>
       </div>
-      <v-row v-if="canReadProjects" class="kanban-board">
+      <v-row class="kanban-board">
         <v-col cols="12" sm="6" lg="3" v-for="(col, colIdx) in kanbanColumns" :key="colIdx" class="kanban-column">
           <div class="kanban-column-header d-flex justify-content-space-between align-items-center mb-3">
             <h3 class="kanban-col-title">{{ $t(col.title) }}</h3>
@@ -156,13 +155,11 @@
                       @click.prevent="$router.push(localePath(`/projects/${element.id}`))"
                     >{{ $t('View') }}</button>
                     <button
-                      v-if="idPermission(21)"
                       type="button"
                       class="btn btn-edit project-kanban-card__btn"
                       @click.prevent="$router.push(localePath(`/projects/edit/${element.id}`))"
                     >{{ $t('Edit') }}</button>
                     <button
-                      v-if="idPermission(22)"
                       type="button"
                       class="btn btn-delete project-kanban-card__btn"
                       :aria-label="$t('Delete')"
@@ -177,12 +174,7 @@
         </v-col>
       </v-row>
       <app-empty-state
-        v-else-if="!loading"
-        icon="mdi-lock-outline"
-        :title="$t('No Data')"
-      />
-      <app-empty-state
-        v-if="canReadProjects && !projectsLoading && projects.length === 0"
+        v-if="!projectsLoading && projects.length === 0"
         icon="mdi-folder-outline"
         :title="$t('No assigned projects')"
       />
@@ -204,7 +196,6 @@
             <button
               type="button"
               class="btn btn-danger"
-              v-if="idPermission(22)"
               @click.prevent="confirmDeleteProject()"
             >{{ $t('Delete') }}</button>
           </div>
@@ -216,7 +207,6 @@
 <script>
 import draggable from "vuedraggable";
 import { personName } from '~/utils/personName'
-import { collectUserPermissions, hasPermissionId } from '~/utils/permissions'
 import { summarizeProjectProgress } from '~/utils/projectProgress'
 
 export default {
@@ -239,10 +229,6 @@ export default {
       list2: [],
       list3: [],
       list4: [],
-      profile: {},
-      roleId: null,
-      hasFilter: [],
-      loading: true,
       projectsLoading: true,
       deleteDialog: false,
       deleteProjectId: null,
@@ -270,9 +256,6 @@ export default {
         { id: 2, name: this.$t('Last 6 month') },
       ]
     },
-    canReadProjects() {
-      return this.idPermission(20)
-    },
     activeFilterCount() {
       return [this.searchName, this.searchTicket, this.month, this.field].filter(value => value !== null && value !== undefined && value !== '').length
     },
@@ -291,7 +274,6 @@ export default {
     }
   },
   async beforeMount() {
-    await this.loadPermissions()
     this.filterProjects()
     this.$axios.get('/teams', {
       headers: {
@@ -354,40 +336,10 @@ export default {
       if (days === 0) return 'Due today'
       return `${days} ${days === 1 ? 'day' : 'days'} left`
     },
-    async loadPermissions() {
-      this.loading = true
-      try {
-        if (!localStorage.token) {
-          this.hasFilter = []
-          return
-        }
-        const response = await this.$axios.get('/settings', {
-          headers: {
-            'Authorization': `Bearer ${localStorage.token}`,
-            'Content-Type': 'application/json',
-            'localization': this.$i18n.locale,
-          }
-        })
-        this.profile = response.data.data || {}
-        this.hasFilter = collectUserPermissions(this.profile)
-        this.roleId = (Array.isArray(this.profile.roles) && this.profile.roles[0])
-          ? this.profile.roles[0].id
-          : null
-      } catch (e) {
-        this.hasFilter = []
-      } finally {
-        this.loading = false
-      }
-    },
-    idPermission(permission) {
-      if (this.loading) return false
-      return hasPermissionId(this.hasFilter, permission)
-    },
     notification(message, status) {
       status == 'success' ? this.$toast.success(message, this.notificationData) : this.$toast.error(message, this.notificationData);
     },
     log(evt, id) {
-      if (!this.idPermission(21)) return
       if (evt.added) {
         var status_id = id
         var status = 'NEW';

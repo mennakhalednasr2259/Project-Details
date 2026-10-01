@@ -1,15 +1,10 @@
 @import './variables.scss';
-@import './_utils.scss';
-@import './_global.scss';
+@import './_base.scss';
 @import './_theme.scss';
-@import './_theme-extended.scss';
 @import './_theme-dark.scss';
 @import './_components.scss';
-@import './_chat.scss';
-@import './_auth.scss';
 @import './_pages.scss';
 @import './_projects.scss';
-@import './admin-subscription-detail.scss';
 @import './_responsive.scss';
 
 @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap');
@@ -142,8 +137,7 @@ a {
   }
 }
 
-.btn-edit,
-.btn-warning {
+.btn-edit {
   display: inline-flex !important;
   align-items: center;
   justify-content: center;
@@ -165,24 +159,6 @@ a {
   &:hover {
     background: $surface-secondary !important;
     border-color: $border-strong !important;
-  }
-}
-
-.dialog-actions {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 12px;
-  margin-top: 24px;
-
-  .btn-delete,
-  .btn-create,
-  .btn-view,
-  .btn-danger {
-    flex: 0 0 auto;
-    min-width: 96px;
-    width: auto !important;
   }
 }
 
@@ -244,15 +220,6 @@ a {
   }
 }
 
-.btn-show {
-  border: 1px solid $border !important;
-  color: $success !important;
-  background: $surface !important;
-  border-radius: $radius-btn;
-  box-shadow: none;
-  font-weight: 500;
-}
-
 .btn-danger {
   background-color: $danger !important;
   color: $on-primary !important;
@@ -268,10 +235,6 @@ a {
     filter: brightness(0.92);
     color: $on-primary !important;
   }
-}
-
-.section .section-title {
-  color: $text-primary !important;
 }
 
 .ql-toolbar.ql-snow {
@@ -291,10 +254,6 @@ a {
   overflow-y: auto;
   border: 1px solid $border;
   box-shadow: $shadow-sm;
-}
-
-.vue-star-rating .vue-star-rating-star svg {
-  filter: none;
 }
 
 input,

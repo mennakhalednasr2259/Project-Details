@@ -10,12 +10,10 @@
       >
         <nuxt-link :to="localePath('/projects')" class="btn btn-view">{{ $t('Back') }}</nuxt-link>
         <nuxt-link
-          v-if="idPermission(21)"
           :to="localePath(`/projects/edit/${oneProject.id}`)"
           class="btn btn-edit"
         >{{ $t('Edit Project') }}</nuxt-link>
         <button
-          v-if="idPermission(22)"
           class="btn btn-delete"
           @click.prevent="deleteDialogMethod('project', oneProject.id)"
         >{{ $t('Delete Project') }}</button>
@@ -90,7 +88,6 @@
             outlined
             dense
             hide-details
-            :disabled="!idPermission(21)"
             @change="changeStatus()"
           />
         </article>
@@ -131,11 +128,10 @@
             <div><strong>{{ projectProgressSummary.inProgressTasks }}</strong><span>{{ $t('Tasks in progress') }}</span></div>
           </article>
         </div>
-        <div v-if="idPermission(24)" class="project-progress-overview__tasks">
+        <div class="project-progress-overview__tasks">
           <div class="project-progress-overview__tasks-heading">
             <h3>{{ $t('Tasks') }}</h3>
             <button
-              v-if="idPermission(23)"
               type="button"
               class="btn btn-create"
               @click.prevent="openCreateTask"
@@ -165,7 +161,7 @@
       </section>
 
       <v-row class="project-layout">
-        <v-col cols="12" :md="(canShowProjectAside) ? 8 : 12" :lg="(canShowProjectAside) ? 9 : 12">
+        <v-col cols="12" md="8" lg="9">
           <section class="project-card descriptionProject">
             <div class="project-card__head">
               <h3>{{ $t('Description') }}</h3>
@@ -203,11 +199,11 @@
               <span>{{ formatProjectDate(attachment.created_at) }}</span>
             </div>
             <div class="actions attachment-actions">
-              <v-btn class="btn btn-edit" v-if="canContributeProject" @click="editAttachment(attachment.id)">
+              <v-btn class="btn btn-edit" @click="editAttachment(attachment.id)">
                 {{ $t('Edit') }}
               </v-btn>
               <v-btn class="btn btn-delete"
-                @click.prevent="deleteDialogMethod('attachment', attachment.id)" v-if="idPermission(22) || canDeleteOwnAttachment(attachment)">
+                @click.prevent="deleteDialogMethod('attachment', attachment.id)">
                 {{ $t('Delete') }}
               </v-btn>
             </div>
@@ -239,17 +235,16 @@
               <v-btn
                 class="btn btn-delete"
                 @click.prevent="deleteDialogMethod('link', projectLink.id)"
-                v-if="idPermission(22) || canDeleteOwnLink(projectLink)"
               >
                 {{ $t('Delete') }}
               </v-btn>
             </div>
           </section>
 
-          <section class="project-card importantEvent" v-if="idEvent(28)">
+          <section class="project-card importantEvent">
             <div class="project-card__head">
               <h3>{{ $t('Important Event') }}</h3>
-              <button class="btn btn-create" @click="openCreateEventDialog" v-if="idEvent(27)">{{ $t('Add Event') }}</button>
+              <button class="btn btn-create" @click="openCreateEventDialog">{{ $t('Add Event') }}</button>
             </div>
             <v-treeview :items="oneProject.events" transition item-text="name" open-on-click>
               <template v-slot:label="{ item }">
@@ -260,9 +255,9 @@
                   <div v-if="localizedContent(item, 'description')" class="project-event__body">
                     <div v-html="safeHtml(localizedContent(item, 'description'))"></div>
                     <div class="project-event__actions">
-                      <v-btn class="btn btn-edit" @click="openEditEventDialog(item)" v-if="idEvent(29)">{{ $t('Edit') }}</v-btn>
+                      <v-btn class="btn btn-edit" @click="openEditEventDialog(item)">{{ $t('Edit') }}</v-btn>
                       <v-btn class="btn btn-delete"
-                        @click.prevent="deleteDialogMethod('event', item.id)" v-if="idEvent(30)">{{ $t('Delete') }}</v-btn>
+                        @click.prevent="deleteDialogMethod('event', item.id)">{{ $t('Delete') }}</v-btn>
                     </div>
                   </div>
                 </div>
@@ -270,7 +265,7 @@
             </v-treeview>
           </section>
 
-          <template v-if="idPermission(24)">
+          <template >
             <section class="project-card tasks" v-for="(task, index) in (oneProject.tasks || [])" :key="task.id">
               <div class="head task-head">
                 <div class="task-head__content">
@@ -283,16 +278,12 @@
                   </p>
                 </div>
                 <div class="task-head__actions">
-                  <button
-                    v-if="idPermission(25)"
-                    class="btn btn-edit"
+                  <button                    class="btn btn-edit"
                     @click.prevent="openEditTask(task)"
                   >
                     {{ $t('Edit') }}
                   </button>
-                  <button
-                    v-if="idPermission(26)"
-                    class="btn btn-delete"
+                  <button                    class="btn btn-delete"
                     @click.prevent="deleteDialogMethod('task', task.id)"
                   >
                     {{ $t('Delete') }}
@@ -304,10 +295,8 @@
                   class="list-group task-subtask-list"
                   tag="ul"
                   v-model="task.subTasks"
-                  @change="idPermission(25) && changeTaskStatus($event, index)"
-                  v-bind="dragOptions"
-                  :disabled="!idPermission(25)"
-                  @start="drag = true"
+                  @change="changeTaskStatus($event, index)"
+                  v-bind="dragOptions"                  @start="drag = true"
                   @end="drag = false"
                 >
                   <transition-group type="transition" :name="!drag ? 'flip-list' : null">
@@ -315,9 +304,7 @@
                       <div class="subtask-item">
                       <div class="subtask-checklist">
                         <input
-                          :value="element.name"
-                          :disabled="!idPermission(25)"
-                          @change="idPermission(25) && toogleStatusSubTask($event,element.id, task.id,element.status,task.subTasks.length,task.finished)"
+                          :value="element.name"                          @change="toogleStatusSubTask($event,element.id, task.id,element.status,task.subTasks.length,task.finished)"
                           name="subtask-status"
                           type="checkbox"
                           :id="'subtask-' + task.id + '-' + element.id"
@@ -328,7 +315,7 @@
                             <span
                               class="subtask-checklist__name"
                               v-if="!showinputName"
-                              @click.prevent="idPermission(25) && showinputNameMethod($event)"
+                              @click.prevent="showinputNameMethod($event)"
                             >
                               {{ localizedContent(element, 'name') }}
                             </span>
@@ -338,14 +325,13 @@
                               class="d-none form-control"
                               :placeholder="$t('Name')"
                               required
-                              :readonly="!idPermission(25)"
                               @input="setLocalizedContent(element, 'name', $event.target.value)"
-                              @blur="idPermission(25) && hideNameInput($event, element.id, task.id)"
+                              @blur="hideNameInput($event, element.id, task.id)"
                             >
                             <p
                               class="subtask-checklist__description"
                               v-if="!showinputDescription"
-                              @click.prevent="idPermission(25) && showinputDescriptionMethod($event)"
+                              @click.prevent="showinputDescriptionMethod($event)"
                             >{{ localizedContent(element, 'description') }}</p>
                             <input
                               type="text"
@@ -353,16 +339,13 @@
                               class="d-none form-control"
                               :placeholder="$t('Description')"
                               required
-                              :readonly="!idPermission(25)"
                               @input="setLocalizedContent(element, 'description', $event.target.value)"
-                              @blur="idPermission(25) && hideDescInput($event, element.id, task.id)"
+                              @blur="hideDescInput($event, element.id, task.id)"
                             >
                           </span>
                         </label>
                       </div>
-                        <button
-                          v-if="idPermission(26)"
-                          class="btn btn-delete btn-delete--sm"
+                        <button                          class="btn btn-delete btn-delete--sm"
                           @click.prevent="deleteDialogMethod('subtask', element.id)"
                         >
                           <span class="mdi mdi-trash-can-outline" aria-hidden="true"></span>
@@ -370,7 +353,7 @@
                         </button>
                       </div>
                     </li>
-                    <li class="list-group-item" v-if="idPermission(23) && targetCardIndex === index && showSubtaskForm" :key="'add-' + index">
+                    <li class="list-group-item" v-if="targetCardIndex === index && showSubtaskForm" :key="'add-' + index">
                       <div id="checklist" class="subtask-add-form">
                         <input type="checkbox" name="r" disabled>
                         <label>
@@ -398,9 +381,7 @@
                     <span class="mdi mdi-check-circle-outline"></span>
                     {{ $t('Completed') }} {{ task.finished }} {{ $t('of') }} {{ task.subTasks.length }}
                   </p>
-                  <v-btn
-                    v-if="idPermission(23)"
-                    class="btn btn-view"
+                  <v-btn                    class="btn btn-view"
                     @click.prevent="addSubTaskMethod(index)"
                   >+ {{ $t('Add Sub Task') }}</v-btn>
                 </div>
@@ -412,29 +393,23 @@
             </section>
           </template>
           <project-milestones
-            :project-id="oneProject.id"
-            :can-manage="canContributeProject"
-            class="project-card milestones-wrap"
+            :project-id="oneProject.id"            class="project-card milestones-wrap"
           />
         </v-col>
-        <v-col cols="12" md="4" lg="3" v-if="canShowProjectAside">
+        <v-col cols="12" md="4" lg="3">
           <aside class="project-aside">
             <h3>{{ $t('Add To Card') }}</h3>
-            <button class="project-aside__btn" @click.prevent="openCreateTask" v-if="idPermission(23)">
+            <button class="project-aside__btn" @click.prevent="openCreateTask">
               <span class="mdi mdi-playlist-plus"></span>
               {{ $t('Add Task') }}
             </button>
-            <button
-              v-if="canContributeProject"
-              class="project-aside__btn"
+            <button              class="project-aside__btn"
               @click.prevent="addAttachmentDialog = true"
             >
               <span class="mdi mdi-file-document-multiple-outline"></span>
               {{ $t('Attachment') }}
             </button>
-            <button
-              v-if="canContributeProject"
-              class="project-aside__btn"
+            <button              class="project-aside__btn"
               @click="addLinkDialog = true"
             >
               <span class="mdi mdi-link-variant"></span>
@@ -474,7 +449,6 @@
             <button
               type="button"
               class="btn btn-danger"
-              v-if="canDeleteSelected"
               @click.prevent="confirmDelete()"
             >{{ $t('Delete') }}</button>
           </div>
@@ -555,7 +529,6 @@
 <script>
 import draggable from "vuedraggable";
 import { personName } from '~/utils/personName'
-import { collectUserPermissions, hasPermissionId } from '~/utils/permissions';
 import { summarizeProjectProgress, summarizeTaskProgress } from '~/utils/projectProgress'
 import { sanitizeHtml } from '~/utils/sanitizeHtml'
 export default {
@@ -629,34 +602,11 @@ export default {
       savingMembers: false,
       loadingMembers: true,
       targetCardIndex: -1,
-      profile: {},
-      hasFilter: [],
-      eventPermissions:[],
-
     }
   },
   async beforeMount() {
     this.getProject()
     this.getMembers()
-    if (localStorage.token) {
-      await this.$axios.get('/settings', {
-        headers: {
-          'Authorization': `Bearer ${localStorage.token}`,
-          'Content-Type': 'application/json',
-          'localization': this.$i18n.locale,
-        }
-      })
-        .then((response) => {
-          this.profile = response.data.data
-          this.hasFilter = collectUserPermissions(this.profile)
-          this.eventPermissions = Array.isArray(this.profile.permissions) ? this.profile.permissions : this.hasFilter
-        })
-        .catch(() => {
-          this.hasFilter = []
-          this.eventPermissions = []
-        })
-    }
-
   },
   methods: {
     safeHtml(value) {
@@ -665,21 +615,6 @@ export default {
     taskProgress(task) {
       return summarizeTaskProgress(task)
     },
-    idPermission(permission) {
-      return hasPermissionId(this.hasFilter, permission)
-    },
-    idEvent(permission) {
-      return hasPermissionId(this.eventPermissions, permission)
-    },
-    canDeleteOwnAttachment(attachment) {
-      const uid = this.currentUserId
-      return !!(uid && attachment && Number(attachment.created_by) === uid)
-    },
-    canDeleteOwnLink(link) {
-      const uid = this.currentUserId
-      return !!(uid && link && Number(link.created_by) === uid)
-    },
-
     getNewEvent(data) {
       this.oneProject = data;
     },
@@ -690,12 +625,10 @@ export default {
       this.getMembers()
     },
     openCreateTask() {
-      if (!this.idPermission(23)) return
       this.editingTask = null
       this.addTaskDialog = true
     },
     openEditTask(task) {
-      if (!this.idPermission(25)) return
       this.editingTask = task ? { ...task } : null
       this.addTaskDialog = true
     },
@@ -713,9 +646,6 @@ export default {
       this.addEvent = addEvent;
     },
     editProject(options = {}) {
-      if(!this.idPermission(21)){
-        return Promise.resolve()
-      }
       const syncMembers = !!(options && options.syncMembers)
       const formData = new FormData();
       if (this.selectProjectImage !== null) {
@@ -753,7 +683,6 @@ export default {
       this.loading = isLoading;
     },
     showinputProjectName(event,number) {
-      if (!this.idPermission(21)) return
       event.srcElement.classList.add('d-none')
       event.srcElement.parentElement.children[number].classList.remove('d-none')
       event.srcElement.parentElement.children[number].focus()
@@ -891,10 +820,6 @@ export default {
       }
     },
     addLink() {
-      if (!this.canContributeProject) {
-        this.notification(this.$t('You Are Not Authorized For This Action'), 'error')
-        return
-      }
       const form = this.$refs.addLinkForm
       if (form && !form.validate()) return
       if (this.savingLink) return
@@ -955,7 +880,6 @@ export default {
       status == 'success' ? this.$toast.success(message, this.notificationData) : this.$toast.error(message, this.notificationData);
     },
     addSubTaskMethod(index) {
-      if (!this.idPermission(23)) return
       this.targetCardIndex = index
       this.showSubtaskForm = true
     },
@@ -967,7 +891,6 @@ export default {
       this.validSubTask = true
     },
     addTask(id) {
-      if (!this.idPermission(23)) return
       if (!String(this.taskName || '').trim()) {
         this.notification(this.$t('Name is required'), 'error')
         return
@@ -1151,10 +1074,6 @@ export default {
       }
     },
     addAttachment() {
-      if (!this.canContributeProject) {
-        this.notification(this.$t('You Are Not Authorized For This Action'), 'error')
-        return
-      }
       if (!this.selectedFiles) {
         this.notification(this.$t('Select a file first'), 'error')
         return
@@ -1251,7 +1170,7 @@ export default {
       })
     },
     toggleMemberRow(id) {
-      if (!this.idPermission(21) || this.savingMembers) return
+      if (this.savingMembers) return
       const nid = Number(id)
       const index = (this.memberSelected || []).findIndex((value) => Number(value) === nid)
       if (index === -1) {
@@ -1262,7 +1181,7 @@ export default {
       this.syncMembers()
     },
     syncMembers() {
-      if (!this.idPermission(21) || this.savingMembers) return
+      if (this.savingMembers) return
       this.savingMembers = true
       this.editProject({ syncMembers: true })
         .catch((error) => {
@@ -1311,37 +1230,6 @@ export default {
     assignedMembers() {
       return this.members || []
     },
-    currentUserId() {
-      return this.profile && this.profile.id != null ? Number(this.profile.id) : null
-    },
-    isProjectMember() {
-      const uid = this.currentUserId
-      if (!uid) return false
-      const lists = [
-        (this.oneProject && this.oneProject.members) || [],
-        this.members || [],
-      ]
-      if (lists.some((list) => (list || []).some((member) => member && Number(member.id) === uid))) {
-        return true
-      }
-      // Assigned on any task in this project
-      const tasks = (this.oneProject && this.oneProject.tasks) || []
-      return tasks.some((task) => {
-        const members = (task && task.members) || []
-        if (members.some((m) => Number(m.id) === uid)) return true
-        const subs = (task && task.subTasks) || []
-        return subs.some((sub) => ((sub && sub.members) || []).some((m) => Number(m.id) === uid))
-      })
-    },
-    canManageProject() {
-      return this.idPermission(21) || this.idPermission(19)
-    },
-    canContributeProject() {
-      return this.canManageProject || (this.idPermission(20) && this.isProjectMember)
-    },
-    canShowProjectAside() {
-      return this.idPermission(23) || this.canContributeProject
-    },
     projectStatus() {
       return [
         { name: this.$t('New'), value: 'NEW' },
@@ -1365,28 +1253,6 @@ export default {
       push(this.oneProject && this.oneProject.members)
       push(this.members)
       return Object.values(byId)
-    },
-    canDeleteSelected() {
-      if (this.typeDialog === 'task' || this.typeDialog === 'subtask') {
-        return this.idPermission(26)
-      }
-      if (this.typeDialog === 'project') {
-        return this.idPermission(22)
-      }
-      if (this.typeDialog === 'attachment') {
-        if (this.idPermission(22)) return true
-        const att = ((this.oneProject && this.oneProject.attachments) || []).find((a) => Number(a.id) === Number(this.typeId))
-        return this.canDeleteOwnAttachment(att)
-      }
-      if (this.typeDialog === 'link') {
-        if (this.idPermission(22)) return true
-        const link = ((this.oneProject && this.oneProject.links) || []).find((a) => Number(a.id) === Number(this.typeId))
-        return this.canDeleteOwnLink(link)
-      }
-      if (this.typeDialog === 'event') {
-        return this.idEvent(30)
-      }
-      return false
     },
     dragOptions() {
       return {

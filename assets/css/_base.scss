@@ -1,0 +1,167 @@
+.container {
+  max-width: unset !important;
+  width: 100% !important;
+  padding-left: 40px !important;
+  padding-right: 40px !important;
+}
+
+a {
+  text-decoration: none !important;
+  color: inherit !important;
+}
+
+@media #{$extraSmall} {
+  .container {
+    width: 100% !important;
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+}
+
+@media (max-width: 959px) {
+  .container {
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+  }
+}
+
+@media #{$extraLarge} {
+  .container {
+    max-width: 1400px !important;
+  }
+}
+
+.v-application,
+.v-main__wrap {
+  background: $background !important;
+  font-family: inherit !important;
+}
+
+button {
+  letter-spacing: 0 !important;
+}
+
+.v-input__slot::before {
+  border: 0 !important;
+}
+
+.v-messages__message {
+  text-align: center;
+}
+
+.v-input input {
+  text-align: inherit;
+}
+
+.btn {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.theme--light.v-btn:hover::before,
+.theme--light.v-btn:focus::before,
+.v-ripple-container:focus::before {
+  opacity: 0 !important;
+}
+
+.theme--light.v-list-item--active:hover::before,
+.theme--light.v-list-item--active::before {
+  opacity: 0 !important;
+}
+
+.v-progress-linear {
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.justify-content-space-between {
+  justify-content: space-between;
+}
+
+.align-items-center {
+  align-items: center;
+}
+
+.m-auto {
+  margin: auto;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+.form-control {
+  display: block;
+  width: 100%;
+  padding: 10px 12px;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  color: $text-primary;
+  background-color: $surface;
+  background-clip: padding-box;
+  border: 1px solid $border;
+  border-radius: $radius-input;
+  appearance: none;
+  box-shadow: none;
+  transition: border-color $ownTransition;
+}
+
+.form-control:focus {
+  color: $text-primary;
+  background-color: $surface;
+  border-color: $primary;
+  outline: 0;
+  box-shadow: 0 0 0 3px $primary-soft;
+}
+
+.v-input {
+  text-align: end !important;
+}
+
+.v-date-picker-header {
+  direction: ltr !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 8px;
+  padding: 4px 8px !important;
+
+  .v-date-picker-header__value {
+    flex: 1 1 auto;
+    text-align: center !important;
+    pointer-events: auto;
+  }
+
+  .v-btn.v-btn--icon {
+    width: 36px !important;
+    height: 36px !important;
+    min-width: 36px !important;
+    border-radius: 50% !important;
+    border: 1px solid $border !important;
+    background: $surface !important;
+    box-shadow: none !important;
+    margin: 0 !important;
+
+    &::before {
+      border-radius: 50% !important;
+    }
+
+    .v-icon {
+      font-size: 22px !important;
+      color: $text-primary !important;
+      line-height: 1 !important;
+    }
+
+    &:hover {
+      background: $surface-hover !important;
+      border-color: $primary !important;
+
+      .v-icon {
+        color: $primary !important;
+      }
+    }
+  }
+}
