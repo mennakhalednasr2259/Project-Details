@@ -250,6 +250,13 @@ html {
   }
 }
 
+// Keep text comfortably inset in fields that use Vuetify's default style.
+.v-text-field:not(.v-text-field--outlined) > .v-input__control > .v-input__slot,
+.v-select:not(.v-text-field--outlined):not(.v-text-field--solo) > .v-input__control > .v-input__slot,
+.v-autocomplete:not(.v-text-field--outlined):not(.v-text-field--solo) > .v-input__control > .v-input__slot {
+  padding-inline: 12px !important;
+}
+
 .v-textarea > .v-input__control > .v-input__slot {
   align-items: stretch !important;
 }
@@ -373,6 +380,21 @@ html {
     padding-top: 0 !important;
     padding-bottom: 0 !important;
   }
+}
+
+// The input reset above removes Vuetify's own inset, so add it to the text itself.
+.v-text-field.v-text-field--outlined:not(.v-select):not(.v-autocomplete) > .v-input__control > .v-input__slot,
+.v-textarea.v-textarea--outlined > .v-input__control > .v-input__slot {
+  padding-inline: 0 !important;
+}
+
+.v-text-field.v-text-field--outlined:not(.v-select):not(.v-autocomplete) .v-text-field__slot input,
+.v-textarea.v-textarea--outlined .v-text-field__slot textarea {
+  padding-inline: 12px !important;
+}
+
+.v-text-field.task-subtasks__field.v-text-field--outlined:not(.v-select):not(.v-autocomplete) .v-text-field__slot input {
+  padding-inline: 18px !important;
 }
 
 .v-text-field,

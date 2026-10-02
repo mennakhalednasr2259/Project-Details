@@ -59,8 +59,14 @@
 
 .v-application--is-ltr .v-card > .v-card__text,
 .v-application--is-rtl .v-card > .v-card__text {
-  padding-left: 24px !important;
-  padding-right: 24px !important;
+  padding: 20px 24px !important;
+}
+
+@media (max-width: 600px) {
+  .v-application--is-ltr .v-card > .v-card__text,
+  .v-application--is-rtl .v-card > .v-card__text {
+    padding: 16px !important;
+  }
 }
 
 .rms-labeled-field {

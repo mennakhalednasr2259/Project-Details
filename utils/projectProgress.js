@@ -1,3 +1,5 @@
+import { projectTaskTeams, projectTeamKey, resolveProjectTaskTeam } from './projectTeams'
+
 function isFinished(status) {
   return ['FINISHED', 'DONE', 'COMPLETED'].includes(String(status || '').toUpperCase())
 }
@@ -40,4 +42,58 @@ export function summarizeProjectProgress(project = {}) {
     completedItems,
     totalItems,
   }
+}
+
+export function summarizeProjectTeamProgress(project = {}, teams = projectTaskTeams) {
+  const teamProgress = new Map()
+  const tasksByTeam = new Map()
+  const savedProgress = Array.isArray(project.tasks_progress) ? project.tasks_progress : []
+
+  teams.forEach((team) => {
+    teamProgress.set(String(team.id), { ...team, progress: 0 })
+  })
+
+  savedProgress.forEach((item) => {
+    const canonical = resolveProjectTaskTeam(item, teams)
+    if (!canonical) return
+    const key = String(canonical.id)
+    teamProgress.set(key, { ...item, ...canonical, id: canonical.id, progress: Number(item.progress) || 0 })
+  })
+
+  ;(Array.isArray(project.tasks) ? project.tasks : []).forEach((task) => {
+    const namedTeams = Array.isArray(task.team_names) ? task.team_names : []
+    const ids = Array.isArray(task.team_ids) && task.team_ids.length
+      ? task.team_ids
+      : (task.team_id != null ? [task.team_id] : [])
+    const assignments = namedTeams.length
+      ? namedTeams
+      : ids.map(id => ({ id }))
+
+    assignments.forEach((assignment) => {
+      const canonical = resolveProjectTaskTeam(assignment, teams)
+      const key = projectTeamKey(assignment, teams)
+      if (!key) return
+
+      if (!teamProgress.has(key)) {
+        const label = canonical || assignment
+        teamProgress.set(key, {
+          ...label,
+          id: canonical ? canonical.id : assignment.id,
+          progress: 0,
+        })
+      }
+      if (!tasksByTeam.has(key)) tasksByTeam.set(key, [])
+      tasksByTeam.get(key).push(task)
+    })
+  })
+
+  tasksByTeam.forEach((tasks, key) => {
+    const summaries = tasks.map(summarizeTaskProgress)
+    const totalItems = summaries.reduce((total, summary) => total + summary.totalItems, 0)
+    const weightedProgress = summaries.reduce((total, summary) => total + summary.percent * summary.totalItems, 0)
+    const entry = teamProgress.get(key)
+    if (entry) entry.progress = totalItems ? Math.round(weightedProgress / totalItems) : 0
+  })
+
+  return Array.from(teamProgress.values())
 }

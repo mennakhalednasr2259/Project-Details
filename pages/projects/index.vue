@@ -613,7 +613,7 @@ export default {
   display: flex;
   flex-direction: column;
   gap: 12px;
-  padding: 14px;
+  padding: 16px;
   border: 1px solid $border;
   border-radius: 12px;
   background: $surface;
@@ -870,7 +870,7 @@ export default {
 
 @media (max-width: 600px) {
   .project-kanban-card {
-    padding: 12px;
+    padding: 14px;
     gap: 10px;
   }
 }

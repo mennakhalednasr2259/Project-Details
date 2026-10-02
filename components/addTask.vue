@@ -50,18 +50,17 @@
         <v-col cols="12" sm="6">
           <label class="rms-labeled-field__label">{{ $t('Department') }}</label>
           <v-select
-            v-model="Departmentvalue"
+            :value="Departmentvalue[0] || null"
             :items="depatment"
             item-text="name"
             item-value="id"
             outlined
             dense
             hide-details="auto"
-            multiple
-            chips
-            deletable-chips
             :placeholder="$t('Department')"
-            @change="onDepartmentsChange"
+            :hint="$t('Select one project team')"
+            persistent-hint
+            @change="onDepartmentChange"
           />
         </v-col>
         <v-col cols="12" sm="6">
@@ -267,6 +266,7 @@ export default {
         })
       })
 
+      if (!allowed.size) return this.projectMembers
       return this.projectMembers.filter((member) => allowed.has(String(member.id)))
     },
   },
@@ -347,10 +347,14 @@ export default {
       this.date = task.deadline_date || null
       this.time = task.deadline_time || null
       this.idProject = task.project_id || this.lockedProjectId
-      this.Departmentvalue = task.team_id != null ? [task.team_id] : []
+      const taskTeamId = Array.isArray(task.team_ids) && task.team_ids.length
+        ? task.team_ids[0]
+        : task.team_id
+      this.Departmentvalue = taskTeamId != null ? [taskTeamId] : []
       this.Assignevalue = Array.isArray(task.members)
         ? task.members.map((member) => member.id).filter((id) => id != null)
         : []
+      this.onDepartmentsChange()
       this.$nextTick(() => {
         if (this.quill) {
           this.quill.root.innerHTML = sanitizeHtml(this.$i18n.locale === 'en'
@@ -370,10 +374,11 @@ export default {
 
       this.idProject = projectId
 
-      const [projectRes, membersRes, teamsRes] = await Promise.all([
+      const [projectRes, membersRes, teamsRes, taskTeamsRes] = await Promise.all([
         this.$axios.get(`/projects/${projectId}`, { headers: this.authHeaders() }),
         this.$axios.get(`/projects/${projectId}/members`, { headers: this.authHeaders() }),
         this.$axios.get('/team/members', { headers: this.authHeaders() }),
+        this.$axios.get('/task-teams', { headers: this.authHeaders() }),
       ])
 
       const projectData = (projectRes.data && projectRes.data.data) || {}
@@ -396,8 +401,36 @@ export default {
         ? teamsRes.data.data
         : []
 
+      const sharedTaskTeams = Array.isArray(taskTeamsRes.data && taskTeamsRes.data.data)
+        ? taskTeamsRes.data.data
+        : []
+      const progressTeams = Array.isArray(projectData.tasks_progress) ? projectData.tasks_progress : []
       const apiDepartments = Array.isArray(projectData.departments) ? projectData.departments : []
-      if (apiDepartments.length) {
+      if (sharedTaskTeams.length) {
+        this.depatment = sharedTaskTeams.map((dept) => {
+          const team = this.allTeamsWithMembers.find((item) =>
+            String(item.name || '').trim() === String(dept.name || '').trim() ||
+            String(item.name_en || '').trim() === String(dept.name_en || '').trim()
+          )
+          return {
+            ...dept,
+            members: team && Array.isArray(team.members) ? team.members : [],
+          }
+        })
+      } else if (progressTeams.length) {
+        this.depatment = progressTeams.map((dept, index) => {
+          const team = this.allTeamsWithMembers.find((item) =>
+            (dept.id != null && String(item.id) === String(dept.id)) ||
+            String(item.name || '').trim() === String(dept.name || '').trim() ||
+            String(item.name_en || '').trim() === String(dept.name_en || '').trim()
+          )
+          return {
+            ...dept,
+            id: dept.id != null ? dept.id : (team ? team.id : `project-team-${index}`),
+            members: team && Array.isArray(team.members) ? team.members : [],
+          }
+        })
+      } else if (apiDepartments.length) {
         this.depatment = apiDepartments.map((dept) => {
           const team = this.allTeamsWithMembers.find((item) => String(item.id) === String(dept.id))
           const memberIdSet = new Set((dept.member_ids || []).map((id) => String(id)))
@@ -440,6 +473,10 @@ export default {
       const allowed = new Set(this.filteredAssignees.map((m) => String(m.id)))
       this.Assignevalue = (this.Assignevalue || []).filter((id) => allowed.has(String(id)))
     },
+    onDepartmentChange(teamId) {
+      this.Departmentvalue = teamId == null ? [] : [teamId]
+      this.onDepartmentsChange()
+    },
     removeSubTask(index) {
       this.subtaskRows.splice(index, 1)
     },
@@ -458,7 +495,7 @@ export default {
     },
     buildPayload() {
       const projectId = this.idProject || this.lockedProjectId
-      const teamIds = Array.isArray(this.Departmentvalue) ? this.Departmentvalue : []
+      const teamIds = Array.isArray(this.Departmentvalue) ? this.Departmentvalue.slice(0, 1) : []
       const payload = {
         project_id: projectId,
         name: this.name,
@@ -474,6 +511,10 @@ export default {
         deadline: this.date ? `${this.date} ${this.time || '00:00'}` : null,
         status: this.statusProject,
         team_id: teamIds[0],
+        team_ids: teamIds,
+        team_names: this.depatment
+          .filter((team) => teamIds.map(String).includes(String(team.id)))
+          .map((team) => ({ id: team.id, name: team.name, name_en: team.name_en || '' })),
         members: Array.isArray(this.Assignevalue) ? this.Assignevalue : [],
       }
 
@@ -505,7 +546,7 @@ export default {
         return
       }
 
-      const teamIds = Array.isArray(this.Departmentvalue) ? this.Departmentvalue : []
+      const teamIds = Array.isArray(this.Departmentvalue) ? this.Departmentvalue.slice(0, 1) : []
       if (!teamIds.length) {
         this.notification(this.$t('Department') + ' ' + this.$t('Required'), 'error')
         return

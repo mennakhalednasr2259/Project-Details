@@ -2,6 +2,7 @@ import Quill from 'quill'
 import Vue from 'vue'
 import translationsAr from '~/locales/ar.js'
 import translationsEn from '~/locales/en.js'
+import { projectTaskTeams } from '~/utils/projectTeams'
 
 const STORAGE_KEY = 'project-details-training-api-v1'
 function showToast(message, type) {
@@ -36,7 +37,12 @@ const makeState = () => {
       id: 1, name: 'إطلاق المنصة الجديدة', name_ar: 'إطلاق المنصة الجديدة', name_en: 'New Platform Launch',
       ticket_id: 'PRJ-2026-014', status: 'IN_PROGRESS', start_date: '2026-09-01', dead_line: '2026-11-30',
       customer_name: 'شركة آفاق للتقنية', customer_name_ar: 'شركة آفاق للتقنية', customer_name_en: 'Afaq Technology', created_by: 'مريم أحمد', image, progress: 60, days_left: '62 يوم متبقي',
-      tasks_progress: [{ name: 'فريق المنتج', name_en: 'Product Team', progress: 64 }, { name: 'فريق التطبيقات', name_en: 'App Team', progress: 45 }],
+      tasks_progress: [
+        { name: 'فرونت اند', name_en: 'Front End', progress: 0 },
+        { name: 'باك اند', name_en: 'Back End', progress: 0 },
+        { name: 'مختبرين', name_en: 'Testers', progress: 0 },
+        { name: 'مصممين الواجهة الأمامية', name_en: 'Front End Designers', progress: 0 },
+      ],
       members: [people[0], people[1], people[2]], description: '<p>منصة موحدة تساعد فرق العمل على تنظيم المشاريع ومتابعة الإنجاز والتواصل بفعالية.</p>', description_en: '<p>A unified platform that helps teams organize projects, track progress, and communicate effectively.</p>',
       attachments: [
         { id: 101, type: 'image', path: image, file_name: 'صورة المشروع', isSample: true, description: 'صورة المشروع', by: 'مريم أحمد', created_at: '2026-09-20', created_by: 1 },
@@ -52,30 +58,35 @@ const makeState = () => {
         { id: 303, name: 'إطلاق النسخة التجريبية', description: '<p>تجهيز النسخة التجريبية.</p>', children: [] },
       ],
       tasks: [
-        { id: 401, name: 'تصميم واجهات لوحة التحكم', description: '<p>تجهيز التصميم النهائي للشاشات الرئيسية ومراجعته مع الفريق.</p>', deadline_date: '2026-09-24', deadline_time: '15:00', finished: 2, members: [people[1]], comments: [], subTasks: [{ id: 411, name: 'تحديد نظام الألوان والخطوط', description: '', status: 'FINISHED', members: [] }, { id: 412, name: 'تصميم صفحة المشاريع', description: '', status: 'FINISHED', members: [] }, { id: 413, name: 'مراجعة التصميم مع الفريق', description: '', status: 'HOLD', members: [] }] },
-        { id: 402, name: 'تطوير نظام تسجيل الدخول', description: '<p>تسجيل الدخول بالبريد الإلكتروني مع استعادة كلمة المرور.</p>', deadline_date: '2026-10-12', deadline_time: '', finished: 1, members: [people[2], people[3]], comments: [], subTasks: [{ id: 421, name: 'تجهيز واجهة تسجيل الدخول', description: '', status: 'FINISHED', members: [] }, { id: 422, name: 'ربط الواجهة بخدمة المصادقة', description: '', status: 'HOLD', members: [] }] },
+        { id: 401, name: 'تصميم واجهات لوحة التحكم', description: '<p>تجهيز التصميم النهائي للشاشات الرئيسية ومراجعته مع الفريق.</p>', deadline_date: '2026-09-24', deadline_time: '15:00', finished: 2, team_id: 'front-end-designers', team_ids: ['front-end-designers'], team_names: [{ id: 'front-end-designers', name: 'مصممين الواجهة الأمامية', name_en: 'Front End Designers' }], members: [people[1]], comments: [], subTasks: [{ id: 411, name: 'تحديد نظام الألوان والخطوط', description: '', status: 'FINISHED', members: [] }, { id: 412, name: 'تصميم صفحة المشاريع', description: '', status: 'FINISHED', members: [] }, { id: 413, name: 'مراجعة التصميم مع الفريق', description: '', status: 'HOLD', members: [] }] },
+        { id: 402, name: 'تطوير نظام تسجيل الدخول', description: '<p>تسجيل الدخول بالبريد الإلكتروني مع استعادة كلمة المرور.</p>', deadline_date: '2026-10-12', deadline_time: '', finished: 1, team_id: 'front-end', team_ids: ['front-end'], team_names: [{ id: 'front-end', name: 'فرونت اند', name_en: 'Front End' }], members: [people[2], people[3]], comments: [], subTasks: [{ id: 421, name: 'تجهيز واجهة تسجيل الدخول', description: '', status: 'FINISHED', members: [] }, { id: 422, name: 'ربط الواجهة بخدمة المصادقة', description: '', status: 'HOLD', members: [] }] },
       ],
-      milestones: [{ id: 501, name: 'اعتماد التصميم النهائي', due_date: '2026-09-25', status: 'DONE' }, { id: 502, name: 'إطلاق النسخة التجريبية', due_date: '2026-10-20', status: 'IN_PROGRESS' }],
-      comments: {},
+      milestones: [],
+      comments: [
+        { id: 601, comment: 'تمت مراجعة الملفات ومشاركة الملاحظات مع الفريق.', author: 'مريم أحمد', author_en: 'Maryam Ahmed', image: avatar, created_at: '2026-09-29' },
+        { id: 602, comment: 'التصميم جاهز للمراجعة النهائية.', author: 'عمر خالد', author_en: 'Omar Khaled', image: avatar, created_at: '2026-09-29' },
+        { id: 603, comment: 'هل يمكن توضيح موعد التسليم؟', author: 'سارة محمود', author_en: 'Sara Mahmoud', image: avatar, created_at: '2026-09-28' },
+        { id: 604, comment: 'تم تحديث تفاصيل المهمة.', author: 'مريم أحمد', author_en: 'Maryam Ahmed', image: avatar, created_at: '2026-09-27' },
+      ],
     },
     {
       id: 2, name: 'تطوير تطبيق الجوال', name_ar: 'تطوير تطبيق الجوال', name_en: 'Mobile App Development',
       ticket_id: 'PRJ-2026-011', status: 'NEW', start_date: '2026-10-01', dead_line: '2026-12-18',
       customer_name: 'شركة آفاق للتقنية', customer_name_ar: 'شركة آفاق للتقنية', customer_name_en: 'Afaq Technology', created_by: 'مريم أحمد', image, progress: 0, days_left: '80 يوم متبقي',
       tasks_progress: [{ name: 'فريق التطبيقات', name_en: 'App Team', progress: 18 }], members: [people[2], people[3]],
-      description: '<p>تطوير تطبيق جوال لتسهيل متابعة المشاريع والمهام.</p>', description_en: '<p>A mobile app that makes it easier to track projects and tasks.</p>', attachments: [], links: [], events: [], tasks: [], milestones: [], comments: {},
+      description: '<p>تطوير تطبيق جوال لتسهيل متابعة المشاريع والمهام.</p>', description_en: '<p>A mobile app that makes it easier to track projects and tasks.</p>', attachments: [], links: [], events: [], tasks: [], milestones: [], comments: [],
     },
     {
       id: 3, name: 'هوية العلامة التجارية', name_ar: 'هوية العلامة التجارية', name_en: 'Brand Identity',
       ticket_id: 'PRJ-2026-008', status: 'FINISHED', start_date: '2026-07-05', dead_line: '2026-09-10',
       customer_name: 'شركة آفاق للتقنية', customer_name_ar: 'شركة آفاق للتقنية', customer_name_en: 'Afaq Technology', created_by: 'مريم أحمد', image, progress: 100, days_left: '',
-      tasks_progress: [{ name: 'فريق التصميم', name_en: 'Design Team', progress: 100 }], members: [people[0]], description: '<p>تطوير الهوية البصرية للعلامة التجارية.</p>', description_en: '<p>Develop the visual identity for the brand.</p>', attachments: [], links: [], events: [], tasks: [], milestones: [], comments: {},
+      tasks_progress: [{ name: 'فريق التصميم', name_en: 'Design Team', progress: 100 }], members: [people[0]], description: '<p>تطوير الهوية البصرية للعلامة التجارية.</p>', description_en: '<p>Develop the visual identity for the brand.</p>', attachments: [], links: [], events: [], tasks: [], milestones: [], comments: [],
     },
     {
       id: 4, name: 'بوابة الشركاء', name_ar: 'بوابة الشركاء', name_en: 'Partner Portal',
       ticket_id: 'PRJ-2026-005', status: 'POSTPONED', start_date: '2026-06-12', dead_line: '2026-10-30',
       customer_name: 'شركة آفاق للتقنية', customer_name_ar: 'شركة آفاق للتقنية', customer_name_en: 'Afaq Technology', created_by: 'مريم أحمد', image, progress: 0, days_left: '33 يوم متبقي',
-      tasks_progress: [{ name: 'فريق المنتج', name_en: 'Product Team', progress: 36 }], members: [people[1], people[3]], description: '<p>بوابة للتواصل مع شركاء العمل.</p>', description_en: '<p>A portal for communicating with business partners.</p>', attachments: [], links: [], events: [], tasks: [], milestones: [], comments: {},
+      tasks_progress: [{ name: 'فريق المنتج', name_en: 'Product Team', progress: 36 }], members: [people[1], people[3]], description: '<p>بوابة للتواصل مع شركاء العمل.</p>', description_en: '<p>A portal for communicating with business partners.</p>', attachments: [], links: [], events: [], tasks: [], milestones: [], comments: [],
     },
   ]
   const peopleEn = { 'مريم أحمد': 'Maryam Ahmed', 'عمر خالد': 'Omar Khaled', 'سارة محمود': 'Sara Mahmoud', 'نور علي': 'Nour Ali' }
@@ -134,6 +145,23 @@ function readState() {
     const peopleById = Object.fromEntries(defaults.people.map(person => [String(person.id), person]))
     const teamsByArabicName = Object.fromEntries(defaults.teams.map(team => [team.name, team]))
 
+    if (!state.referenceDetailsSectionsV1) {
+      const sampleProject = (state.projects || []).find(project => String(project.id) === '1')
+      if (sampleProject) {
+        const isDefaultTeamProgress = (sampleProject.tasks_progress || []).length === 2 &&
+          sampleProject.tasks_progress[0].name === 'فريق المنتج' &&
+          sampleProject.tasks_progress[1].name === 'فريق التطبيقات'
+        if (isDefaultTeamProgress) sampleProject.tasks_progress = defaults.projects[0].tasks_progress
+
+        const isDefaultMilestones = (sampleProject.milestones || []).length === 2 &&
+          sampleProject.milestones.some(milestone => String(milestone.id) === '501' && milestone.status === 'DONE') &&
+          sampleProject.milestones.some(milestone => String(milestone.id) === '502' && milestone.status === 'IN_PROGRESS')
+        if (isDefaultMilestones) sampleProject.milestones = []
+      }
+      state.referenceDetailsSectionsV1 = true
+      try { saveState(state) } catch (error) { /* Keep the in-memory migration if storage is full. */ }
+    }
+
     state.projects = (state.projects || []).map((project) => {
       const fallback = projectsById[String(project.id)] || {}
       return Object.assign({}, project, {
@@ -161,6 +189,7 @@ function readState() {
             name_en: progress.name_en || fallbackTeam?.name_en,
           })
         }),
+        comments: Array.isArray(project.comments) ? project.comments : (fallback.comments || []),
       })
     })
     return state
@@ -287,6 +316,7 @@ function handle(method, url, body, config = {}) {
 
   if (method === 'get') {
     if (path === 'teams') return Promise.resolve(response(state.teams.map(({ id, name, name_en }) => ({ id, name, name_en }))))
+    if (path === 'task-teams') return Promise.resolve(response(projectTaskTeams))
     if (path === 'team/members') return Promise.resolve(response(state.teams))
     if (path === 'projects') {
       let list = state.projects.map(p => ({ ...p, attachmentsCount: (p.attachments || []).length, linksCount: (p.links || []).length, eventsCount: flattenEvents(p.events).length }))
@@ -311,6 +341,7 @@ function handle(method, url, body, config = {}) {
       list.sort((a, b) => (a.sort_order ?? Number.MAX_SAFE_INTEGER) - (b.sort_order ?? Number.MAX_SAFE_INTEGER))
       return Promise.resolve(response(list))
     }
+    if (segments[0] === 'projects' && segments[2] === 'comments') return Promise.resolve({ data: project?.comments || [] })
     if (segments[0] === 'projects' && segments.length === 2) return Promise.resolve(response(project || null))
     if (segments[0] === 'projects' && segments[2] === 'members') return Promise.resolve(response(project ? (project.members || []).map(m => ({ ...m, in_project: true })) : []))
     if (segments[0] === 'projects' && segments[2] === 'milestones') {
@@ -349,7 +380,7 @@ function handle(method, url, body, config = {}) {
     }
     if (path === 'projects') {
       const id = ++state.nextId
-      const created = { id, name: data.name || data.name_ar || data.name_en || 'مشروع جديد', name_ar: data.name_ar, name_en: data.name_en, ticket_id: data.ticket_id || `PRJ-${id}`, status: 'NEW', start_date: data.start_date || today, dead_line: data.dead_line || '', customer_name: data.customer_name || data.customer_name_ar || '', customer_name_ar: data.customer_name_ar, customer_name_en: data.customer_name_en, created_by: 'مريم أحمد', created_by_en: 'Maryam Ahmed', image: data.image?.dataUrl || image, progress: 0, days_left: '', tasks_progress: [], members: state.people.filter(m => (data.members || []).map(String).includes(String(m.id))), member_sections: data.member_sections || {}, description: data.description || data.description_ar || data.description_en || '', description_ar: data.description_ar || data.description || '', description_en: data.description_en || '', attachments: [], links: [], events: [], tasks: [], milestones: [], comments: {} }
+      const created = { id, name: data.name || data.name_ar || data.name_en || 'مشروع جديد', name_ar: data.name_ar, name_en: data.name_en, ticket_id: data.ticket_id || `PRJ-${id}`, status: 'NEW', start_date: data.start_date || today, dead_line: data.dead_line || '', customer_name: data.customer_name || data.customer_name_ar || '', customer_name_ar: data.customer_name_ar, customer_name_en: data.customer_name_en, created_by: 'مريم أحمد', created_by_en: 'Maryam Ahmed', image: data.image?.dataUrl || image, progress: 0, days_left: '', tasks_progress: [], members: state.people.filter(m => (data.members || []).map(String).includes(String(m.id))), member_sections: data.member_sections || {}, description: data.description || data.description_ar || data.description_en || '', description_ar: data.description_ar || data.description || '', description_en: data.description_en || '', attachments: [], links: [], events: [], tasks: [], milestones: [], comments: [] }
       if (data['link[link]']) created.links.push({ id: ++state.nextId, link: data['link[link]'], description: data['link[description]'] || '', by: 'مريم أحمد', created_at: today, created_by: 1 })
       state.projects.unshift(created)
       return Promise.resolve(done(created, 'تم إنشاء المشروع'))
@@ -358,6 +389,16 @@ function handle(method, url, body, config = {}) {
       const p = state.projects.find(x => String(x.id) === String(data.project_id))
       if (p) p.links.push({ id: ++state.nextId, link: data.link, description: data.description, description_ar: data.description_ar || data.description || '', description_en: data.description_en || '', by: 'مريم أحمد', by_en: 'Maryam Ahmed', created_at: today, created_by: 1 })
       return Promise.resolve(done(true, 'تمت إضافة الرابط'))
+    }
+    if (path === 'links/update') {
+      const link = state.projects.flatMap(p => p.links || []).find(item => String(item.id) === String(data.id))
+      if (link) Object.assign(link, {
+        link: data.link,
+        description: data.description,
+        description_ar: data.description_ar || data.description || '',
+        description_en: data.description_en || '',
+      })
+      return Promise.resolve(done(true, 'تم تحديث الرابط'))
     }
     if (path === 'attachments') {
       const p = state.projects.find(x => String(x.id) === String(data.project_id))
@@ -395,7 +436,7 @@ function handle(method, url, body, config = {}) {
         const [deadline_date = '', deadline_time = ''] = String(data.deadline || '').split(' ')
         const members = state.people.filter(member => (data.members || []).map(String).includes(String(member.id)))
         const subTasks = (data.subTasks || []).map(sub => ({ id: ++state.nextId, name: sub.name, name_ar: sub.name_ar, name_en: sub.name_en, description: sub.description || '', description_ar: sub.description_ar || '', description_en: sub.description_en || '', status: sub.status || 'HOLD', members: [] }))
-        p.tasks.push({ id: ++state.nextId, name: data.name || 'مهمة جديدة', name_ar: data.name_ar || '', name_en: data.name_en || '', description: data.description || '', description_ar: data.description_ar || '', description_en: data.description_en || '', deadline_date: deadline_date || data.deadline_date || '', deadline_time: deadline_time || data.deadline_time || '', status: data.status || 'NEW', team_id: data.team_id, members, finished: subTasks.filter(sub => sub.status === 'FINISHED').length, comments: [], subTasks })
+        p.tasks.push({ id: ++state.nextId, name: data.name || 'مهمة جديدة', name_ar: data.name_ar || '', name_en: data.name_en || '', description: data.description || '', description_ar: data.description_ar || '', description_en: data.description_en || '', deadline_date: deadline_date || data.deadline_date || '', deadline_time: deadline_time || data.deadline_time || '', status: data.status || 'NEW', team_id: data.team_id, team_ids: data.team_ids || (data.team_id != null ? [data.team_id] : []), team_names: data.team_names || [], members, finished: subTasks.filter(sub => sub.status === 'FINISHED').length, comments: [], subTasks })
       }
       return Promise.resolve(done(true, 'تمت إضافة المهمة'))
     }
@@ -408,6 +449,20 @@ function handle(method, url, body, config = {}) {
       const task = state.projects.flatMap(p => p.tasks || []).find(t => String(t.id) === String(segments[1]))
       if (task) task.comments.push({ id: ++state.nextId, comment: data.comment, author: 'مريم أحمد', author_en: 'Maryam Ahmed', created_at: today })
       return Promise.resolve(done(true, 'تمت إضافة التعليق'))
+    }
+    if (segments[0] === 'projects' && segments[2] === 'comments') {
+      if (project && data.comment) {
+        project.comments = Array.isArray(project.comments) ? project.comments : []
+        project.comments.unshift({
+          id: ++state.nextId,
+          comment: String(data.comment).trim(),
+          author: 'مريم أحمد',
+          author_en: 'Maryam Ahmed',
+          image: state.people[0]?.image || avatar,
+          created_at: today,
+        })
+      }
+      return Promise.resolve(done(project?.comments || [], 'تمت إضافة التعليق'))
     }
     if (segments[0] === 'projects' && segments[2] === 'milestones') {
       if (project) project.milestones.push({ id: ++state.nextId, name: data.name, name_ar: data.name_ar, name_en: data.name_en, due_date: data.due_date, status: data.status || 'OPEN' })
@@ -521,3 +576,4 @@ export default (_, inject) => {
     return `/${String(src).replace(/^\/+/, '')}`
   })
 }
+

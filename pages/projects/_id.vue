@@ -6,17 +6,9 @@
     <v-container v-else-if="oneProject">
       <page-header
         :breadcrumb="$t('Current Projects')"
-        title=""
+        :title="projectDisplayName"
       >
         <nuxt-link :to="localePath('/projects')" class="btn btn-view">{{ $t('Back') }}</nuxt-link>
-        <nuxt-link
-          :to="localePath(`/projects/edit/${oneProject.id}`)"
-          class="btn btn-edit"
-        >{{ $t('Edit Project') }}</nuxt-link>
-        <button
-          class="btn btn-delete"
-          @click.prevent="deleteDialogMethod('project', oneProject.id)"
-        >{{ $t('Delete Project') }}</button>
       </page-header>
 
       <section class="project-hero">
@@ -45,29 +37,20 @@
           </div>
         </div>
 
-        <div class="project-hero__progress">
-          <div class="project-hero-progress__heading">
-            <span>{{ $t('Project Progress') }}</span>
-            <strong>{{ projectProgressSummary.percent }}%</strong>
+        <div v-if="projectTeamProgress.length" class="project-hero__teams">
+          <div v-for="team in projectTeamProgress" :key="team.name" class="project-hero__team">
+            <v-progress-circular
+              :value="team.progress"
+              :size="40"
+              :width="3"
+              color="primary"
+            >{{ team.progress }}%</v-progress-circular>
+            <span>{{ localizedContent(team, 'name') }}</span>
           </div>
-          <v-progress-linear
-            :value="projectProgressSummary.percent"
-            height="10"
-            rounded
-            color="primary"
-            background-color="#E9EFED"
-          />
-          <span class="project-hero-progress__caption">
-            <template v-if="projectProgressSummary.totalItems">
-              {{ $t('Progress is based on task completion') }}
-            </template>
-            <template v-else-if="oneProject.status === 'FINISHED'">{{ $t('Marked as completed') }}</template>
-            <template v-else>{{ $t('No tasks yet') }}</template>
-          </span>
         </div>
       </section>
 
-      <div class="project-meta detailsAboutPerson">
+      <div class="project-meta">
         <article class="project-meta__card">
           <p>{{ $t('Created By') }}</p>
           <h4>{{ projectCreatorDisplayName }}</h4>
@@ -92,71 +75,23 @@
           />
         </article>
 
-        <article class="project-meta__card project-meta__card--assignees">
-          <p>{{ $t('Assigned To') }}</p>
-          <div class="project-assignees">
-            <div
-              v-for="item in assignedMembers"
-              :key="item.id"
-              class="project-assignees__row"
-            >
-              <img
-                class="project-assignees__avatar"
-                :src="$resolveImage(item.image, require('@/assets/imgs/avatar.png'))"
-                :alt="memberDisplayName(item)"
-              >
-              <span class="project-assignees__name">{{ memberDisplayName(item) }}</span>
-              <span class="project-assignees__check mdi mdi-check" />
-            </div>
-            <p v-if="!assignedMembers.length" class="project-assignees__empty">{{ $t('No Data') }}</p>
-          </div>
-        </article>
       </div>
 
-      <section class="project-progress-overview">
-        <div class="project-progress-overview__stats">
-          <article class="project-progress-stat">
-            <span class="mdi mdi-format-list-checks" aria-hidden="true"></span>
-            <div><strong>{{ projectProgressSummary.totalTasks }}</strong><span>{{ $t('Total Tasks') }}</span></div>
-          </article>
-          <article class="project-progress-stat">
-            <span class="mdi mdi-check-circle-outline" aria-hidden="true"></span>
-            <div><strong>{{ projectProgressSummary.completedTasks }}</strong><span>{{ $t('Completed Tasks') }}</span></div>
-          </article>
-          <article class="project-progress-stat">
-            <span class="mdi mdi-progress-clock" aria-hidden="true"></span>
-            <div><strong>{{ projectProgressSummary.inProgressTasks }}</strong><span>{{ $t('Tasks in progress') }}</span></div>
-          </article>
+      <section class="project-assignees-card">
+        <div class="project-card__head">
+          <h3>{{ $t('Assigned To') }}</h3>
         </div>
-        <div class="project-progress-overview__tasks">
-          <div class="project-progress-overview__tasks-heading">
-            <h3>{{ $t('Tasks') }}</h3>
-            <button
-              type="button"
-              class="btn btn-create"
-              @click.prevent="openCreateTask"
-            >{{ $t('Add Task') }}</button>
+        <div class="project-assignees">
+          <div v-for="item in assignedMembers" :key="item.id" class="project-assignees__row">
+            <img
+              class="project-assignees__avatar"
+              :src="$resolveImage(item.image, require('@/assets/imgs/avatar.png'))"
+              :alt="memberDisplayName(item)"
+            >
+            <span class="project-assignees__name">{{ memberDisplayName(item) }}</span>
+            <span class="project-assignees__check mdi mdi-check" />
           </div>
-          <div v-if="oneProject.tasks && oneProject.tasks.length" class="project-task-summary-list">
-            <article v-for="task in oneProject.tasks" :key="`summary-${task.id}`" class="project-task-summary">
-              <div class="project-task-summary__heading">
-                <span>{{ localizedContent(task, 'name') }}</span>
-                <strong>{{ taskProgress(task).percent }}%</strong>
-              </div>
-              <v-progress-linear :value="taskProgress(task).percent" height="6" rounded color="primary" />
-              <small v-if="taskProgress(task).hasSubtasks">{{ taskProgress(task).completedItems }} {{ $t('of') }} {{ taskProgress(task).totalItems }} {{ $t('Subtasks completed') }}</small>
-              <small v-else-if="taskProgress(task).percent === 100">{{ $t('Finished') }}</small>
-              <small v-else-if="taskProgress(task).percent > 0">{{ $t('In Progress') }}</small>
-              <small v-else>{{ $t('Not Started') }}</small>
-            </article>
-          </div>
-          <div v-else class="project-tasks-empty">
-            <span class="mdi mdi-clipboard-text-outline" aria-hidden="true"></span>
-            <div>
-              <strong>{{ $t('No tasks yet') }}</strong>
-              <p>{{ $t('Add a task to start tracking project progress.') }}</p>
-            </div>
-          </div>
+          <p v-if="!assignedMembers.length" class="project-assignees__empty">{{ $t('No Data') }}</p>
         </div>
       </section>
 
@@ -169,11 +104,36 @@
             <div class="project-card__body" v-html="projectDescription"></div>
           </section>
 
-          <section
-            v-for="attachment in oneProject.attachments"
-            :key="attachment.id"
-            class="project-card attachment"
-          >
+          <section class="project-card importantEvent">
+            <div class="project-card__head">
+              <h3>{{ $t('Important Event') }}</h3>
+            </div>
+            <v-expansion-panels v-if="projectEvents.length" accordion flat class="project-notes-list">
+              <v-expansion-panel v-for="item in projectEvents" :key="item.id">
+                <v-expansion-panel-header expand-icon="mdi-chevron-left">{{ localizedContent(item, 'name') }}</v-expansion-panel-header>
+                <v-expansion-panel-content>
+                  <div class="project-event__body" v-html="safeHtml(localizedContent(item, 'description'))"></div>
+                  <div class="project-event__actions">
+                    <v-btn class="btn btn-edit" @click="openEditEventDialog(item)">{{ $t('Edit') }}</v-btn>
+                    <v-btn class="btn btn-delete" @click.prevent="deleteDialogMethod('event', item.id)">{{ $t('Delete') }}</v-btn>
+                  </div>
+                </v-expansion-panel-content>
+              </v-expansion-panel>
+            </v-expansion-panels>
+            <p v-else class="project-section-empty">{{ $t('No notes yet') }}</p>
+          </section>
+
+          <section class="project-content-section">
+            <div class="project-section-heading">
+              <h3>{{ $t('Attachments') }}</h3>
+              <span class="project-section-count">{{ (oneProject.attachments || []).length }}</span>
+            </div>
+            <div v-if="oneProject.attachments && oneProject.attachments.length" class="project-attachments-list">
+            <section
+              v-for="attachment in oneProject.attachments"
+              :key="attachment.id"
+              class="project-card attachment"
+            >
             <a
               v-if="!attachment.missing"
               class="attachment__preview"
@@ -207,13 +167,22 @@
                 {{ $t('Delete') }}
               </v-btn>
             </div>
+            </section>
+            </div>
+            <p v-else class="project-section-empty">{{ $t('No attachments yet') }}</p>
           </section>
 
-          <section
-            v-for="projectLink in (oneProject.links || [])"
-            :key="'link-' + projectLink.id"
-            class="project-card attachment project-link"
-          >
+          <section class="project-content-section">
+            <div class="project-section-heading">
+              <h3>{{ $t('Links') }}</h3>
+              <span class="project-section-count">{{ (oneProject.links || []).length }}</span>
+            </div>
+            <div v-if="oneProject.links && oneProject.links.length" class="project-links-grid">
+              <section
+                v-for="projectLink in (oneProject.links || [])"
+                :key="'link-' + projectLink.id"
+                class="project-card attachment project-link"
+              >
             <a
               class="attachment__preview project-link__preview"
               :href="safeExternalLink(projectLink.link) || undefined"
@@ -232,6 +201,9 @@
               <span>{{ formatProjectDate(projectLink.created_at) }}</span>
             </div>
             <div class="actions attachment-actions">
+              <v-btn class="btn btn-edit" @click="editLink(projectLink)">
+                {{ $t('Edit') }}
+              </v-btn>
               <v-btn
                 class="btn btn-delete"
                 @click.prevent="deleteDialogMethod('link', projectLink.id)"
@@ -239,159 +211,106 @@
                 {{ $t('Delete') }}
               </v-btn>
             </div>
+              </section>
+            </div>
+            <p v-else class="project-section-empty">{{ $t('No links yet') }}</p>
           </section>
 
-          <section class="project-card importantEvent">
-            <div class="project-card__head">
-              <h3>{{ $t('Important Event') }}</h3>
-              <button class="btn btn-create" @click="openCreateEventDialog">{{ $t('Add Event') }}</button>
+          <section class="project-task-section">
+            <div class="project-section-heading">
+              <div class="project-section-heading__title">
+                <h3>{{ $t('Tasks') }}</h3>
+                <span class="project-section-count">{{ (oneProject.tasks || []).length }}</span>
+              </div>
             </div>
-            <v-treeview :items="oneProject.events" transition item-text="name" open-on-click>
-              <template v-slot:label="{ item }">
-                <div class="project-event">
-                  <h3>
-                    {{ localizedContent(item, 'name') }}
-                  </h3>
-                  <div v-if="localizedContent(item, 'description')" class="project-event__body">
-                    <div v-html="safeHtml(localizedContent(item, 'description'))"></div>
-                    <div class="project-event__actions">
-                      <v-btn class="btn btn-edit" @click="openEditEventDialog(item)">{{ $t('Edit') }}</v-btn>
-                      <v-btn class="btn btn-delete"
-                        @click.prevent="deleteDialogMethod('event', item.id)">{{ $t('Delete') }}</v-btn>
+            <template v-if="oneProject.tasks && oneProject.tasks.length">
+              <article class="project-task-item" v-for="task in visibleTasks" :key="task.id">
+                <div class="project-task-row">
+                  <div class="project-task-row__name">
+                    <img
+                      v-if="taskMember(task)"
+                      class="project-task-row__avatar"
+                      :src="$resolveImage(taskMember(task).image, require('@/assets/imgs/avatar.png'))"
+                      :alt="memberDisplayName(taskMember(task))"
+                    >
+                    <div>
+                      <strong>{{ localizedContent(task, 'name') }}</strong>
                     </div>
                   </div>
-                </div>
-              </template>
-            </v-treeview>
-          </section>
-
-          <template >
-            <section class="project-card tasks" v-for="(task, index) in (oneProject.tasks || [])" :key="task.id">
-              <div class="head task-head">
-                <div class="task-head__content">
-                  <h3>{{ localizedContent(task, 'name') }}</h3>
-                  <div class="task-head__desc" v-html="safeHtml(localizedContent(task, 'description'))"></div>
-                  <p v-if="task.deadline_date" class="task-head__deadline">
-                    <span class="mdi mdi-calendar-clock"></span>
+                  <span v-if="task.deadline_date" class="project-task-row__deadline">
+                    <span class="mdi mdi-calendar-clock" aria-hidden="true"></span>
                     {{ formatProjectDate(task.deadline_date) }}
                     <template v-if="task.deadline_time"> · {{ task.deadline_time }}</template>
-                  </p>
-                </div>
-                <div class="task-head__actions">
-                  <button                    class="btn btn-edit"
-                    @click.prevent="openEditTask(task)"
+                  </span>
+                  <div class="project-task-row__status">
+                    <span class="project-task-row__count">
+                      {{ $t('Completed') }} {{ taskProgress(task).completedItems }} {{ $t('of') }} {{ taskProgress(task).totalItems }}
+                    </span>
+                    <span class="project-task-row__badge" :class="taskProgress(task).percent === 100 ? 'is-done' : 'is-unfinished'">
+                      <span class="mdi" :class="taskProgress(task).percent === 100 ? 'mdi-check-circle-outline' : 'mdi-clock-outline'" aria-hidden="true"></span>
+                      {{ taskProgress(task).percent === 100 ? $t('Finished') : $t('Not Finished') }}
+                    </span>
+                  </div>
+                  <nuxt-link
+                    class="project-task-row__view"
+                    :to="localePath(`/todo/${task.id}`)"
                   >
-                    {{ $t('Edit') }}
-                  </button>
-                  <button                    class="btn btn-delete"
-                    @click.prevent="deleteDialogMethod('task', task.id)"
-                  >
-                    {{ $t('Delete') }}
-                  </button>
+                    {{ $t('View') }}
+                  </nuxt-link>
                 </div>
+              </article>
+              <button
+                v-if="visibleTaskCount < oneProject.tasks.length"
+                type="button"
+                class="project-tasks-more"
+                @click="visibleTaskCount += 3"
+              >{{ $t('Show More') }}</button>
+            </template>
+            <div v-else class="project-tasks-empty">
+              <span class="mdi mdi-clipboard-text-outline" aria-hidden="true"></span>
+              <div>
+                <strong>{{ $t('No tasks yet') }}</strong>
+                <p>{{ $t('Add a task to start tracking project progress.') }}</p>
               </div>
-              <div class="subtack">
-                <draggable
-                  class="list-group task-subtask-list"
-                  tag="ul"
-                  v-model="task.subTasks"
-                  @change="changeTaskStatus($event, index)"
-                  v-bind="dragOptions"                  @start="drag = true"
-                  @end="drag = false"
+            </div>
+          </section>
+          <section class="project-card project-comments">
+            <div class="project-section-heading">
+              <div>
+                <h3>{{ $t('Project Comments') }}</h3>
+                <p>{{ $t('Keep in touch with the project team') }}</p>
+              </div>
+            </div>
+            <div v-if="oneProject.comments && oneProject.comments.length" class="project-comments__list">
+              <article v-for="comment in oneProject.comments" :key="comment.id" class="project-comments__item">
+                <img
+                  :src="$resolveImage(comment.image, require('@/assets/imgs/avatar.png'))"
+                  :alt="comment.author"
                 >
-                  <transition-group type="transition" :name="!drag ? 'flip-list' : null">
-                    <li class="list-group-item" v-for="(element, index) in task.subTasks" :key="element.id">
-                      <div class="subtask-item">
-                      <div class="subtask-checklist">
-                        <input
-                          :value="element.name"                          @change="toogleStatusSubTask($event,element.id, task.id,element.status,task.subTasks.length,task.finished)"
-                          name="subtask-status"
-                          type="checkbox"
-                          :id="'subtask-' + task.id + '-' + element.id"
-                          :checked="element.status == 'FINISHED'"
-                        >
-                        <label class="subtask-checklist__label" :for="'subtask-' + task.id + '-' + element.id">
-                          <span class="subtask-checklist__content">
-                            <span
-                              class="subtask-checklist__name"
-                              v-if="!showinputName"
-                              @click.prevent="showinputNameMethod($event)"
-                            >
-                              {{ localizedContent(element, 'name') }}
-                            </span>
-                            <input
-                              type="text"
-                              :value="localizedContent(element, 'name')"
-                              class="d-none form-control"
-                              :placeholder="$t('Name')"
-                              required
-                              @input="setLocalizedContent(element, 'name', $event.target.value)"
-                              @blur="hideNameInput($event, element.id, task.id)"
-                            >
-                            <p
-                              class="subtask-checklist__description"
-                              v-if="!showinputDescription"
-                              @click.prevent="showinputDescriptionMethod($event)"
-                            >{{ localizedContent(element, 'description') }}</p>
-                            <input
-                              type="text"
-                              :value="localizedContent(element, 'description')"
-                              class="d-none form-control"
-                              :placeholder="$t('Description')"
-                              required
-                              @input="setLocalizedContent(element, 'description', $event.target.value)"
-                              @blur="hideDescInput($event, element.id, task.id)"
-                            >
-                          </span>
-                        </label>
-                      </div>
-                        <button                          class="btn btn-delete btn-delete--sm"
-                          @click.prevent="deleteDialogMethod('subtask', element.id)"
-                        >
-                          <span class="mdi mdi-trash-can-outline" aria-hidden="true"></span>
-                          {{ $t('Delete') }}
-                        </button>
-                      </div>
-                    </li>
-                    <li class="list-group-item" v-if="targetCardIndex === index && showSubtaskForm" :key="'add-' + index">
-                      <div id="checklist" class="subtask-add-form">
-                        <input type="checkbox" name="r" disabled>
-                        <label>
-                          <i class="glyphicon glyphicon-pushpin"></i>
-                          <v-form ref="formSubTask" v-model="validSubTask" lazy-validation>
-                            <v-text-field v-model="taskName" :rules="nameRules" :placeholder="$t('Name')" outlined dense required></v-text-field>
-                            <v-text-field :placeholder="$t('Details')" v-model="taskDescription" outlined dense required></v-text-field>
-                            <div class="subtask-add-form__actions">
-                              <v-btn class="btn btn-view" @click.prevent="cancelAddSubTask">
-                                {{ $t('Cancel') }}
-                              </v-btn>
-                              <v-btn :disabled="!validSubTask" class="btn btn-create" @click="addTask(task.id)">
-                                {{ $t('Create') }}
-                              </v-btn>
-                            </div>
-                          </v-form>
-                        </label>
-                      </div>
-                    </li>
-                  </transition-group>
-                </draggable>
-                <v-divider class="mt-4 mb-4"></v-divider>
-                <div class="task-footer">
-                  <p>
-                    <span class="mdi mdi-check-circle-outline"></span>
-                    {{ $t('Completed') }} {{ task.finished }} {{ $t('of') }} {{ task.subTasks.length }}
-                  </p>
-                  <v-btn                    class="btn btn-view"
-                    @click.prevent="addSubTaskMethod(index)"
-                  >+ {{ $t('Add Sub Task') }}</v-btn>
+                <div>
+                  <div class="project-comments__meta">
+                    <strong>{{ $i18n.locale === 'en' ? (comment.author_en || comment.author) : comment.author }}</strong>
+                    <time>{{ formatProjectDate(comment.created_at) }}</time>
+                  </div>
+                  <p>{{ comment.comment }}</p>
                 </div>
-                <task-comments
-                  :task-id="task.id"
-                  :members="projectMentionMembers"
-                />
-              </div>
-            </section>
-          </template>
+              </article>
+            </div>
+            <p v-else class="project-section-empty">{{ $t('No project comments yet') }}</p>
+            <form class="project-comments__form" @submit.prevent="submitProjectComment">
+              <v-textarea
+                v-model="projectCommentDraft"
+                :placeholder="$t('Write a comment')"
+                rows="2"
+                auto-grow
+                outlined
+                hide-details
+              />
+              <button class="btn btn-create" type="submit" :disabled="savingProjectComment">
+                {{ $t('Post Comment') }}
+              </button>
+            </form>
+          </section>
           <project-milestones
             :project-id="oneProject.id"            class="project-card milestones-wrap"
           />
@@ -498,21 +417,21 @@
       <v-dialog v-model="addLinkDialog" max-width="400">
         <v-card>
           <v-container class="p-8">
-            <h3 class="mt-4">{{ $t('Add Link') }}</h3>
+            <h3 class="mt-4">{{ $t(editingLinkId ? 'Edit Link' : 'Add Link') }}</h3>
             <v-divider class="mt-5 mb-5"></v-divider>
             <v-form ref="addLinkForm" v-model="valid" lazy-validation>
               <label>{{ $t('Paste Ticket link') }}</label>
               <v-text-field class="mb-4" v-model="ticketLink" :rules="ticketLinkRule"
-                :placeholder="$t('Paste Ticket link')" hide-details="auto" required></v-text-field>
+                :placeholder="$t('Paste Ticket link')" outlined dense hide-details="auto" required></v-text-field>
               <label class="mt-5">{{ $t('Display text') }}</label>
               <v-text-field v-model="displayText" :rules="displayTextRule" :placeholder="$t('Display text')"
-                hide-details="auto" required></v-text-field>
+                outlined dense hide-details="auto" required></v-text-field>
               <v-btn
                 class="btn btn-create mt-5 mb-5 w-100 d-block"
                 :loading="savingLink"
                 :disabled="savingLink"
                 @click.prevent="addLink()"
-              >{{ $t('Add') }}</v-btn>
+              >{{ $t(editingLinkId ? 'Save' : 'Add') }}</v-btn>
             </v-form>
 
           </v-container>
@@ -529,7 +448,7 @@
 <script>
 import draggable from "vuedraggable";
 import { personName } from '~/utils/personName'
-import { summarizeProjectProgress, summarizeTaskProgress } from '~/utils/projectProgress'
+import { summarizeProjectTeamProgress, summarizeTaskProgress } from '~/utils/projectProgress'
 import { sanitizeHtml } from '~/utils/sanitizeHtml'
 export default {
   display: "Transitions",
@@ -543,6 +462,9 @@ export default {
       validSubTask: true,
       showSubtaskForm: false,
       oneProject: null,
+      projectCommentDraft: '',
+      savingProjectComment: false,
+      visibleTaskCount: 3,
       selectedAttachmentFile: null,
       attachmentPreviewUrl: null,
       showFileName: '',
@@ -554,6 +476,7 @@ export default {
       addTaskDialog: false,
       editingTask: null,
       addLinkDialog: false,
+      editingLinkId: null,
       savingLink: false,
       showinputName: false,
       showinputDescription: false,
@@ -608,12 +531,42 @@ export default {
     this.getProject()
     this.getMembers()
   },
+  watch: {
+    addLinkDialog(isOpen) {
+      if (!isOpen) this.editingLinkId = null
+    },
+  },
   methods: {
+    submitProjectComment() {
+      const comment = this.projectCommentDraft.trim()
+      if (!comment) {
+        this.notification(this.$t('Comment is required'), 'error')
+        return
+      }
+      if (!this.oneProject || this.savingProjectComment) return
+      this.savingProjectComment = true
+      this.$axios.post(`/projects/${this.oneProject.id}/comments`, { comment }, {
+        headers: { 'Accept-Language': this.$i18n.locale }
+      }).then((res) => {
+        const comments = res.data && res.data.data
+        if (Array.isArray(comments)) this.$set(this.oneProject, 'comments', comments)
+        this.projectCommentDraft = ''
+      }).catch((error) => {
+        this.notification(error?.response?.data?.message || this.$t('Something went wrong'), 'error')
+      }).finally(() => {
+        this.savingProjectComment = false
+      })
+    },
     safeHtml(value) {
       return sanitizeHtml(value)
     },
     taskProgress(task) {
       return summarizeTaskProgress(task)
+    },
+    taskMember(task) {
+      const taskMembers = task && Array.isArray(task.members) ? task.members : []
+      const projectMembers = this.oneProject && Array.isArray(this.oneProject.members) ? this.oneProject.members : []
+      return taskMembers[0] || projectMembers[0] || null
     },
     getNewEvent(data) {
       this.oneProject = data;
@@ -707,7 +660,10 @@ export default {
       })
         .then(res => {
           this.oneProject = res.data.data;
-          this.statusValue = this.oneProject.status
+          // Older saved projects may still use HOLD for the postponed state.
+          this.statusValue = this.oneProject.status === 'HOLD'
+            ? 'POSTPONED'
+            : this.oneProject.status
           this.loading = false
           this.mergeAssignedMembersFromProject()
         })
@@ -819,17 +775,25 @@ export default {
         return ''
       }
     },
+    editLink(item) {
+      this.editingLinkId = item.id
+      this.displayText = this.projectLinkDescription(item)
+      this.ticketLink = item.link
+      this.addLinkDialog = true
+    },
     addLink() {
       const form = this.$refs.addLinkForm
       if (form && !form.validate()) return
       if (this.savingLink) return
 
       this.savingLink = true
-      this.$axios.post('/links', {
+      const currentLink = (this.oneProject.links || []).find(item => String(item.id) === String(this.editingLinkId))
+      this.$axios.post(this.editingLinkId ? '/links/update' : '/links', {
+        id: this.editingLinkId,
         project_id: this.$route.params.id,
         description: this.displayText,
-        description_ar: this.$i18n.locale === 'ar' ? this.displayText : '',
-        description_en: this.$i18n.locale === 'en' ? this.displayText : '',
+        description_ar: this.$i18n.locale === 'ar' ? this.displayText : (currentLink && currentLink.description_ar) || '',
+        description_en: this.$i18n.locale === 'en' ? this.displayText : (currentLink && currentLink.description_en) || '',
         link: String(this.ticketLink || '').trim(),
       }, {
         headers: {
@@ -841,6 +805,7 @@ export default {
         .then(res => {
           this.notification(res.data.message, 'success')
           this.addLinkDialog = false
+          this.editingLinkId = null
           this.ticketLink = ''
           this.displayText = ''
           if (form && form.resetValidation) form.resetValidation()
@@ -1199,9 +1164,6 @@ export default {
     }
   },
   computed: {
-    projectProgressSummary() {
-      return summarizeProjectProgress(this.oneProject || {})
-    },
     projectDisplayName() {
       if (!this.oneProject) return ''
       return this.$i18n.locale === 'en'
@@ -1230,12 +1192,25 @@ export default {
     assignedMembers() {
       return this.members || []
     },
+    projectTeamProgress() {
+      return summarizeProjectTeamProgress(this.oneProject || {})
+    },
+    projectEvents() {
+      const flatten = (events) => (events || []).reduce((items, event) => {
+        items.push(event)
+        return items.concat(flatten(event.children))
+      }, [])
+      return flatten(this.oneProject && this.oneProject.events)
+    },
+    visibleTasks() {
+      return (this.oneProject && this.oneProject.tasks || []).slice(0, this.visibleTaskCount)
+    },
     projectStatus() {
       return [
         { name: this.$t('New'), value: 'NEW' },
         { name: this.$t('In Progress'), value: 'IN_PROGRESS' },
         { name: this.$t('Finished'), value: 'FINISHED' },
-        { name: this.$t('Hold'), value: 'HOLD' },
+        { name: this.$t('Postponed'), value: 'POSTPONED' },
       ]
     },
     projectMentionMembers() {
@@ -1275,6 +1250,15 @@ export default {
   padding-bottom: 40px;
 }
 
+::v-deep > .container {
+  max-width: 1320px;
+}
+
+::v-deep .app-page-header__title {
+  font-size: 24px;
+  line-height: 1.35;
+}
+
 .project-hero {
   display: flex;
   flex-wrap: wrap;
@@ -1284,7 +1268,8 @@ export default {
   background: $surface;
   border: 1px solid $border;
   border-radius: 10px;
-  padding: 20px 24px;
+  min-height: 106px;
+  padding: 18px 22px;
   margin-bottom: 16px;
 
   &__identity {
@@ -1297,8 +1282,8 @@ export default {
 
   &__avatar {
     position: relative;
-    width: 88px;
-    height: 88px;
+    width: 68px;
+    height: 68px;
     border-radius: 50%;
     overflow: hidden;
     flex-shrink: 0;
@@ -1312,28 +1297,6 @@ export default {
       object-fit: cover;
     }
 
-    &.is-editable {
-      cursor: pointer;
-    }
-  }
-
-  &__avatar-overlay {
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: rgba(16, 24, 40, 0.4);
-    opacity: 0;
-    transition: opacity $ownTransition;
-    color: #fff;
-  }
-
-  &__avatar.is-editable:hover &__avatar-overlay {
-    opacity: 1;
   }
 
   &__copy {
@@ -1382,108 +1345,31 @@ export default {
     }
   }
 
-  &__date-range span {
-    cursor: pointer;
-  }
-
-  &__progress {
+  &__teams {
     display: flex;
-    flex-direction: column;
-    gap: 8px;
-    flex: 0 1 300px;
-    min-width: 230px;
+    align-items: flex-start;
+    justify-content: space-between;
+    flex: 0 1 360px;
+    min-width: 0;
+    gap: 14px;
     margin-inline-start: auto;
   }
 }
 
-.project-hero-progress__heading,
-.project-progress-overview__tasks-heading,
-.project-task-summary__heading {
+.project-hero__team {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-}
+  gap: 8px;
+  flex: 0 1 70px;
+  min-width: 0;
 
-.project-hero-progress__heading {
-  span {
-    font-size: 12px;
-    font-weight: 500;
+  > span {
     color: $text-secondary;
+    font-size: 12px;
+    line-height: 1.5;
+    text-align: center;
   }
-
-  strong { font-size: 20px; color: $primary; }
-}
-
-.project-hero-progress__caption {
-  color: $text-secondary;
-  font-size: 11px;
-}
-
-.project-progress-overview {
-  display: grid;
-  grid-template-columns: minmax(220px, 0.8fr) minmax(0, 1.4fr);
-  gap: 20px;
-  padding: 18px;
-  margin-bottom: 18px;
-  border: 1px solid $border;
-  border-radius: 12px;
-  background: $surface;
-  box-shadow: $shadow-sm;
-
-  &__stats {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 8px;
-  }
-
-  &__tasks {
-    min-width: 0;
-    padding-inline-start: 18px;
-    border-inline-start: 1px solid $border;
-  }
-
-  &__tasks-heading {
-    margin-bottom: 12px;
-
-    h3 { margin: 0; font-size: 15px; }
-    .btn { min-height: 34px !important; padding: 0 12px !important; }
-  }
-}
-
-.project-progress-stat {
-  display: flex;
-  align-items: center;
-  gap: 9px;
-  min-width: 0;
-  padding: 10px;
-  border: 1px solid $border;
-  border-radius: 9px;
-  background: $surface-secondary;
-
-  > .mdi { color: $primary; font-size: 20px; }
-
-  div { display: flex; flex-direction: column; min-width: 0; }
-  strong { font-size: 18px; line-height: 1.2; color: $text-primary; }
-  span:not(.mdi) { color: $text-secondary; font-size: 10px; line-height: 1.35; }
-}
-
-.project-task-summary-list { display: grid; gap: 10px; }
-
-.project-task-summary {
-  display: grid;
-  gap: 5px;
-  min-width: 0;
-  padding: 9px 11px;
-  border: 1px solid $border;
-  border-radius: 8px;
-
-  &__heading {
-    span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 12px; }
-    strong { flex: 0 0 auto; color: $primary; font-size: 12px; }
-  }
-
-  small { color: $text-secondary; font-size: 10px; }
 }
 
 .project-tasks-empty {
@@ -1502,7 +1388,7 @@ export default {
 
 .project-meta {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 12px;
   margin-bottom: 20px;
 
@@ -1510,6 +1396,7 @@ export default {
     background: $surface;
     border: 1px solid $border;
     border-radius: 10px;
+    min-height: 98px;
     padding: 16px 18px;
     min-width: 0;
 
@@ -1530,15 +1417,12 @@ export default {
         white-space: nowrap;
       }
 
-      &--assignees {
-        grid-column: auto;
-      }
     }
   }
 
 .project-assignees {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  display: flex;
+  flex-wrap: wrap;
   gap: 8px;
 
   &__row {
@@ -1546,6 +1430,8 @@ export default {
     align-items: center;
     gap: 10px;
     min-width: 0;
+    flex: 1 1 180px;
+    max-width: 260px;
     margin: 0;
     padding: 8px 10px;
     border: 1px solid $border;
@@ -1594,6 +1480,296 @@ export default {
     color: $text-secondary;
     font-size: 13px;
   }
+}
+
+.project-assignees-card {
+  padding: 18px 20px;
+  margin-bottom: 20px;
+  background: $surface;
+  border: 1px solid $border;
+  border-radius: 10px;
+
+  .project-card__head {
+    margin-bottom: 12px;
+  }
+}
+
+.project-section-heading,
+.project-section-heading__title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.project-section-heading {
+  justify-content: space-between;
+  margin-bottom: 12px;
+
+  h3 {
+    margin: 0;
+    color: $text-primary;
+    font-size: 16px;
+    font-weight: 600;
+  }
+}
+
+.project-section-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 22px;
+  height: 22px;
+  padding: 0 6px;
+  border-radius: 999px;
+  background: $primary-soft;
+  color: $primary;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.project-content-section,
+.project-task-section {
+  margin-bottom: 16px;
+}
+
+.project-content-section > .project-card {
+  margin-bottom: 0;
+}
+
+.project-attachments-list {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+  > .attachment {
+    width: min(100%, 390px);
+    gap: 12px;
+
+    .attachment__preview img,
+    .attachment__preview video { width: 60px; height: 60px; }
+    .attachment__preview--missing { width: 60px; height: 60px; }
+    .detailsAttachment { flex-basis: 120px; }
+  }
+}
+
+.project-notes-list {
+  border: 0;
+  border-radius: 0;
+  overflow: visible;
+
+  ::v-deep .v-expansion-panel {
+    background: transparent;
+    box-shadow: none;
+  }
+
+  ::v-deep .v-expansion-panel-header {
+    min-height: 44px;
+    padding: 0 12px;
+    color: $text-primary;
+    font-size: 13px;
+    text-align: start;
+  }
+
+  ::v-deep .v-expansion-panel-header__icon {
+    transform: none;
+  }
+
+  ::v-deep .v-expansion-panel--active .v-expansion-panel-header__icon {
+    transform: rotate(90deg);
+  }
+
+  ::v-deep .v-expansion-panel-content__wrap {
+    padding: 0 16px 16px;
+  }
+}
+
+.project-comments {
+  margin-top: 20px;
+
+  .project-section-heading {
+    align-items: flex-start;
+    margin-bottom: 16px;
+
+    p {
+      margin: 4px 0 0;
+      color: $text-secondary;
+      font-size: 12px;
+    }
+  }
+
+  &__list {
+    display: grid;
+    gap: 16px;
+    margin-bottom: 18px;
+  }
+
+  &__item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+
+    > img {
+      width: 34px;
+      height: 34px;
+      flex: 0 0 34px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    > div { min-width: 0; flex: 1; }
+    p { margin: 6px 0 0; color: $text-primary; font-size: 13px; line-height: 1.6; }
+  }
+
+  &__meta {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+
+    strong { color: $text-primary; font-size: 13px; }
+    time { color: $text-secondary; font-size: 11px; }
+  }
+
+  &__form {
+    display: flex;
+    align-items: stretch;
+    flex-direction: column;
+    gap: 8px;
+
+    .v-input { width: 100%; }
+    .btn { align-self: flex-start; }
+  }
+}
+
+.project-section-empty {
+  margin: 0;
+  padding: 18px;
+  border: 1px dashed $border-strong;
+  border-radius: 9px;
+  color: $text-secondary;
+  font-size: 13px;
+  text-align: center;
+}
+
+.project-links-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+
+  .project-link {
+    min-width: 0;
+    margin: 0;
+    padding: 12px;
+    gap: 10px;
+
+    .project-link__preview {
+      width: 56px;
+      height: 56px;
+    }
+
+    .detailsAttachment {
+      flex-basis: 120px;
+    }
+  }
+}
+
+.project-task-item {
+  margin-bottom: 8px;
+  overflow: hidden;
+  border: 1px solid $border;
+  border-radius: 9px;
+  background: $surface;
+}
+
+.project-task-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto auto auto;
+  align-items: center;
+  gap: 12px;
+  min-height: 62px;
+  padding: 10px 12px;
+  cursor: default;
+
+  &__name {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    min-width: 0;
+
+    > div { display: grid; gap: 5px; min-width: 0; }
+    strong { overflow: hidden; color: $text-primary; font-size: 13px; font-weight: 600; text-overflow: ellipsis; white-space: nowrap; }
+  }
+
+  &__avatar {
+    width: 24px;
+    height: 24px;
+    flex: 0 0 24px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  &__deadline { display: inline-flex; align-items: center; gap: 5px; color: $text-secondary; font-size: 11px; white-space: nowrap; }
+
+  &__status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: $text-secondary;
+    font-size: 11px;
+    white-space: nowrap;
+  }
+
+  &__count,
+  &__badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    min-height: 24px;
+    padding: 4px 9px;
+    border-radius: 999px;
+  }
+
+  &__count {
+    background: $surface-secondary;
+    color: $text-secondary;
+  }
+
+  &__badge {
+    background: $primary-soft;
+    color: $primary;
+
+    &.is-done { background: $surface-secondary; color: $text-secondary; }
+  }
+
+  &__view {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    min-width: 48px;
+    height: 40px;
+    min-height: 40px;
+    padding: 0 8px;
+    border: 1px solid $primary;
+    border-radius: 8px;
+    background: $primary;
+    color: $on-primary !important;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+
+    &:hover { background: $primary-hover; color: $on-primary !important; }
+  }
+}
+
+.project-tasks-more {
+  display: block;
+  margin: 10px 0 0 auto;
+  padding: 5px 0;
+  border: 0;
+  background: transparent;
+  color: $primary;
+  font-size: 12px;
+  cursor: pointer;
 }
 
 .project-layout {
@@ -1742,9 +1918,21 @@ export default {
   }
 
   &__body {
-    margin-top: 8px;
+    margin: 0 -16px;
+    padding: 12px 16px 16px;
+    background: $surface-secondary;
     color: $text-secondary;
     font-size: 13px;
+
+    ::v-deep ul,
+    ::v-deep ol {
+      margin: 0;
+      padding-inline-start: 20px;
+    }
+
+    ::v-deep li + li {
+      margin-top: 4px;
+    }
   }
 
   &__actions {
@@ -1843,6 +2031,7 @@ export default {
     display: flex;
     align-items: center;
     gap: 10px;
+    border-color: rgba(59, 130, 246, 0.35);
     width: 100%;
     margin: 0 0 8px;
     padding: 10px 12px;
@@ -2010,8 +2199,7 @@ export default {
 
 ::v-deep .task-comments,
 ::v-deep .task-checklist,
-::v-deep .task-meta-panel,
-::v-deep .milestones-panel {
+::v-deep .task-meta-panel {
   margin-top: 16px;
   padding-top: 16px;
   border-top: 1px solid $border;
@@ -2038,31 +2226,25 @@ export default {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
+  .project-links-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
   .project-aside {
     position: static;
   }
 
-  .project-progress-overview {
-    grid-template-columns: 1fr;
-
-    &__tasks {
-      padding-inline-start: 0;
-      padding-top: 16px;
-      border-inline-start: 0;
-      border-top: 1px solid $border;
-    }
-  }
 }
 
 @media (max-width: 600px) {
   .project-card {
-    padding: 14px;
+    padding: 16px;
   }
 
   .project-hero {
     padding: 16px;
 
-    &__progress { flex: 1 1 100%; min-width: 0; margin-inline-start: 0; }
+    &__teams { flex: 1 1 100%; min-width: 0; margin-inline-start: 0; }
     &__identity { flex-basis: 100%; }
     &__avatar { width: 64px; height: 64px; }
     &__name { font-size: 18px; line-height: 24px; }
@@ -2072,6 +2254,30 @@ export default {
 
   .project-meta {
     grid-template-columns: 1fr;
+  }
+
+  .project-links-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .project-assignees-card {
+    padding: 16px;
+  }
+
+  .project-comments__form .btn { align-self: stretch; }
+
+  .project-task-row {
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 8px 12px;
+
+    &__name { grid-column: 1; grid-row: 1; }
+    &__deadline { grid-column: 1 / -1; grid-row: 2; }
+    &__status {
+      grid-column: 1 / -1;
+      grid-row: 3;
+      flex-wrap: wrap;
+    }
+    &__view { grid-column: 2; grid-row: 1; }
   }
 
   .attachment-actions {
@@ -2097,16 +2303,6 @@ export default {
     }
   }
 
-  .project-progress-overview__tasks-heading {
-    align-items: flex-start;
-    flex-wrap: wrap;
-  }
-
-  .project-progress-overview { padding: 13px; gap: 14px; }
-  .project-progress-overview__stats { grid-template-columns: 1fr 1fr 1fr; gap: 5px; }
-  .project-progress-stat { flex-direction: column; align-items: flex-start; padding: 8px; }
-  .project-progress-stat strong { font-size: 16px; }
-  .project-progress-stat span:not(.mdi) { font-size: 9px; }
 }
 
 .checkmark {

@@ -39,11 +39,33 @@
         class="milestone-add__name"
         :placeholder="$t('Milestone name')"
       />
-      <date-field
-        v-model="form.due_date"
-        :placeholder="$t('Deadline')"
-        class="milestone-add__date"
-      />
+      <v-menu
+        v-model="dateMenu"
+        :close-on-content-click="false"
+        transition="scale-transition"
+        offset-y
+        min-width="290"
+      >
+        <template v-slot:activator="{ on, attrs }">
+          <v-text-field
+            v-bind="attrs"
+            v-on="on"
+            :value="formatDayDate(form.due_date)"
+            :placeholder="$t('Deadline')"
+            prepend-inner-icon="mdi-calendar-range"
+            class="milestone-add__date"
+            dense
+            outlined
+            readonly
+            hide-details
+          />
+        </template>
+        <v-date-picker
+          v-model="form.due_date"
+          :locale="$i18n.locale === 'ar' ? 'ar' : 'en'"
+          @input="dateMenu = false"
+        />
+      </v-menu>
       <button type="button" class="btn btn-create milestone-add__btn" @click="add">
         {{ $t('Add') }}
       </button>
@@ -62,6 +84,7 @@ export default {
       milestones: [],
       progress: { percent: 0 },
       form: { name: '', due_date: '' },
+      dateMenu: false,
       deleteDialog: false,
       deleteTarget: null,
       deleting: false,
@@ -70,7 +93,7 @@ export default {
   computed: {
     statuses() {
       return [
-        { text: this.$t('New'), value: 'OPEN' },
+        { text: this.$t('Open'), value: 'OPEN' },
         { text: this.$t('In Progress'), value: 'IN_PROGRESS' },
         { text: this.$t('Done'), value: 'DONE' },
       ]
